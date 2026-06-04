@@ -80,10 +80,9 @@ st.markdown(
             border: 0;
         }
 
-        .judo-swipe-layer {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
+        .judo-swipe-zone {
+            display: none;
+            height: 1.2rem;
             background: transparent;
             touch-action: pan-y;
         }
@@ -226,6 +225,10 @@ st.markdown(
                 max-height: calc(100vh - 105px);
                 min-height: 260px;
             }
+
+            .judo-swipe-zone {
+                display: block;
+            }
         }
 
         @media (max-width: 480px) and (orientation: portrait) {
@@ -324,27 +327,27 @@ def add_landscape_swipe_navigation_js() -> None:
                 const wrapper = doc.querySelector('.video-wrapper');
                 if (!wrapper) return;
 
-                let layer = wrapper.querySelector('.judo-swipe-layer');
-                if (!layer) {
-                    layer = doc.createElement('div');
-                    layer.className = 'judo-swipe-layer';
-                    wrapper.appendChild(layer);
+                let zone = wrapper.parentElement && wrapper.parentElement.querySelector('.judo-swipe-zone');
+                if (!zone || zone.parentElement !== wrapper.parentElement) {
+                    zone = doc.createElement('div');
+                    zone.className = 'judo-swipe-zone';
+                    wrapper.parentElement.insertBefore(zone, wrapper);
                 }
 
-                layer.style.display = isLandscape() ? 'block' : 'none';
-                if (layer._judoSwipeLayerBound) return layer;
-                layer._judoSwipeLayerBound = true;
+                zone.style.display = isLandscape() ? 'block' : 'none';
+                if (zone._judoSwipeZoneBound) return zone;
+                zone._judoSwipeZoneBound = true;
 
                 let startX = 0;
                 let startY = 0;
 
-                layer.addEventListener('touchstart', function(e) {
+                zone.addEventListener('touchstart', function(e) {
                     if (!isLandscape() || !e.touches.length) return;
                     startX = e.touches[0].clientX;
                     startY = e.touches[0].clientY;
                 }, { passive: true });
 
-                layer.addEventListener('touchend', function(e) {
+                zone.addEventListener('touchend', function(e) {
                     if (!isLandscape() || !e.changedTouches.length) return;
 
                     const dx = e.changedTouches[0].clientX - startX;
@@ -361,7 +364,7 @@ def add_landscape_swipe_navigation_js() -> None:
                     }
                 }, { passive: true });
 
-                return layer;
+                return zone;
             }
 
             if (doc._judoSwipeBound) return;
