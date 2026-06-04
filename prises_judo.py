@@ -1,3 +1,5 @@
+from html import escape
+
 import streamlit as st
 
 st.set_page_config(
@@ -465,181 +467,16 @@ JUDO_TECHNIQUES = [
     },
 ]
 
-st.markdown(
-    """
-    <style>
-        body {
-            background: linear-gradient(180deg, #f4f7fb 0%, #ffffff 100%);
-        }
-        .app-title {
-            font-size: 2.4rem;
-            margin-bottom: 0.25rem;
-            color: #0f172a;
-        }
-        .app-lead {
-            font-size: 1rem;
-            color: #334155;
-            max-width: 680px;
-            margin-bottom: 1.5rem;
-        }
-        .tech-card {
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 22px;
-            padding: 1.6rem;
-            background: #ffffff;
-            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
-            margin-bottom: 1.2rem;
-        }
-        .tech-card-large {
-            border: 1px solid rgba(15, 23, 42, 0.12);
-            border-radius: 24px;
-            padding: 2rem;
-            background: #ffffff;
-            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
-            margin-bottom: 1.8rem;
-            max-width: 980px;
-        }
-        .tech-title {
-            font-size: 1.85rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 0.45rem;
-        }
-        .tech-meta {
-            color: #64748b;
-            margin-bottom: 1.15rem;
-            font-size: 0.95rem;
-        }
-        .tech-description {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: #334155;
-            margin-bottom: 1.6rem;
-        }
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%;
-            border-radius: 18px;
-            overflow: hidden;
-            background: #000000;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-        }
-        .video-frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        .video-link {
-            margin-top: 1rem;
-            color: #334155;
-            font-size: 0.95rem;
-        }
-        .video-link a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-        .video-link a:hover {
-            text-decoration: underline;
-        }
-        .control-card {
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 20px;
-            background: #ffffff;
-            padding: 1rem 1.2rem;
-            margin-bottom: 1.25rem;
-            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
-        }
-        .control-note {
-            color: #334155;
-            font-size: 0.95rem;
-        }
-        .section-title {
-            margin-top: 1.5rem;
-            margin-bottom: 0.7rem;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-        .pill-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.45rem;
-            margin-bottom: 1rem;
-        }
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.55rem 0.9rem;
-            background: rgba(15, 23, 42, 0.05);
-            border-radius: 999px;
-            color: #0f172a;
-            font-size: 0.95rem;
-        }
-        .small-card {
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 18px;
-            padding: 1rem;
-            background: #f8fafc;
-            margin-top: 1rem;
-        }
-        .streamlit-expanderHeader {
-            font-weight: 700;
-        }
-        @media (max-width: 768px) {
-            .app-title {font-size: 2rem;}
-            .tech-card {padding: 1.2rem;}
-            .control-card {padding: 1rem;}
-            .pill {font-size: 0.9rem; padding: 0.5rem 0.8rem;}
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown('<div class="app-title">🥋 Prises de judo</div>', unsafe_allow_html=True)
-st.markdown(
-    '<div class="app-lead">Explorez les techniques de judo par catégorie, trouvez rapidement une prise et regardez la vidéo directement dans l’application. Le design est optimisé pour les petits écrans.</div>',
-    unsafe_allow_html=True,
-)
-
-categories = sorted({technique["category"] for technique in JUDO_TECHNIQUES})
-
-with st.container():
-    st.markdown(
-        """
-        <div class="control-card">
-            <div class="control-note">Choisissez une catégorie pour découvrir les techniques de judo associées.</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    selected_category = st.selectbox("Catégorie", categories)
-
-filtered_techniques = [
-    technique
-    for technique in JUDO_TECHNIQUES
-    if technique["category"] == selected_category
-]
-
-if not filtered_techniques:
-    st.warning("Aucune prise ne correspond à votre recherche. Essayez un autre mot-clé ou une autre catégorie.")
-    st.stop()
-
-selected_name = st.selectbox(
-    "Prise",
-    sorted(technique["name"] for technique in filtered_techniques),
-)
-
-selected_technique = next(
-    technique for technique in filtered_techniques if technique["name"] == selected_name
-)
-
-technique_count = len(filtered_techniques)
-category_count = len(categories)
+CATEGORY_DETAILS = {
+    "Ashi waza": {"label": "Jambes", "accent": "#2563eb"},
+    "Judo jujitsu": {"label": "Self-défense", "accent": "#dc2626"},
+    "Kansetsu waza": {"label": "Clés", "accent": "#7c3aed"},
+    "Koshi waza": {"label": "Hanches", "accent": "#059669"},
+    "Osaekomi": {"label": "Sol", "accent": "#ca8a04"},
+    "Shime waza": {"label": "Étranglements", "accent": "#0891b2"},
+    "Sutemi waza": {"label": "Sacrifices", "accent": "#ea580c"},
+    "Te waza": {"label": "Mains", "accent": "#4f46e5"},
+}
 
 
 def extract_youtube_id(url: str) -> str:
@@ -651,20 +488,433 @@ def extract_youtube_id(url: str) -> str:
         return url.split("watch?v=")[1].split("&")[0]
     return url
 
+
+def technique_matches_query(technique: dict[str, str], query: str) -> bool:
+    normalized_query = query.strip().lower()
+    if not normalized_query:
+        return True
+
+    searchable_text = " ".join(
+        [
+            technique["name"],
+            technique["category"],
+            technique["description"],
+        ]
+    ).lower()
+    return normalized_query in searchable_text
+
+
+st.markdown(
+    """
+    <style>
+        :root {
+            --ink: #101828;
+            --muted: #667085;
+            --line: rgba(16, 24, 40, 0.10);
+            --panel: rgba(255, 255, 255, 0.92);
+            --soft: #f5f7fb;
+            --brand: #dc2626;
+            --brand-dark: #991b1b;
+            --blue: #2563eb;
+        }
+
+        .stApp {
+            background:
+                radial-gradient(circle at top left, rgba(220, 38, 38, 0.13), transparent 28rem),
+                linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+            color: var(--ink);
+        }
+
+        .block-container {
+            max-width: 1120px;
+            padding: 1rem 1rem 3rem;
+        }
+
+        [data-testid="stHeader"],
+        [data-testid="stToolbar"] {
+            display: none;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 8px;
+            padding: 1.1rem;
+            background:
+                linear-gradient(135deg, rgba(153, 27, 27, 0.95), rgba(16, 24, 40, 0.95)),
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.10) 0 1px, transparent 1px 16px);
+            box-shadow: 0 18px 50px rgba(16, 24, 40, 0.16);
+            color: #ffffff;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -3rem -5rem auto;
+            width: 13rem;
+            height: 13rem;
+            border: 1.4rem solid rgba(255, 255, 255, 0.10);
+            border-radius: 999px;
+        }
+
+        .hero-kicker {
+            position: relative;
+            z-index: 1;
+            width: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 999px;
+            padding: 0.35rem 0.65rem;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+
+        .app-title {
+            position: relative;
+            z-index: 1;
+            margin: 0.8rem 0 0.35rem;
+            font-size: 2.15rem;
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: 0;
+        }
+
+        .app-lead {
+            position: relative;
+            z-index: 1;
+            max-width: 42rem;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 0.98rem;
+            line-height: 1.55;
+        }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.55rem;
+            margin: 0.8rem 0 0;
+        }
+
+        .stat {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 0.75rem;
+            background: var(--panel);
+            box-shadow: 0 10px 30px rgba(16, 24, 40, 0.07);
+        }
+
+        .stat-value {
+            color: var(--ink);
+            font-size: 1.15rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .stat-label {
+            margin-top: 0.35rem;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 650;
+        }
+
+        .section-label {
+            margin: 1.1rem 0 0.45rem;
+            color: var(--ink);
+            font-size: 0.92rem;
+            font-weight: 850;
+        }
+
+        .detail-card,
+        .result-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 16px 44px rgba(16, 24, 40, 0.09);
+        }
+
+        .detail-card {
+            overflow: hidden;
+            margin-top: 0.9rem;
+        }
+
+        .detail-body {
+            padding: 1rem;
+        }
+
+        .category-chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2rem;
+            border-radius: 999px;
+            padding: 0.3rem 0.7rem;
+            background: color-mix(in srgb, var(--chip-color) 13%, white);
+            color: var(--chip-color);
+            font-size: 0.78rem;
+            font-weight: 850;
+        }
+
+        .tech-title {
+            margin: 0.7rem 0 0.45rem;
+            color: var(--ink);
+            font-size: 1.75rem;
+            line-height: 1.08;
+            font-weight: 950;
+        }
+
+        .tech-description {
+            margin: 0;
+            color: #344054;
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #000000;
+        }
+
+        .video-frame {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .video-link {
+            display: inline-flex;
+            margin-top: 0.9rem;
+            color: var(--blue);
+            font-size: 0.9rem;
+            font-weight: 750;
+            text-decoration: none;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.65rem;
+            margin-top: 0.55rem;
+        }
+
+        .result-card {
+            padding: 0.85rem;
+        }
+
+        .result-name {
+            color: var(--ink);
+            font-size: 0.98rem;
+            font-weight: 900;
+            line-height: 1.25;
+        }
+
+        .result-description {
+            margin-top: 0.4rem;
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
+        .stTextInput input,
+        .stSelectbox div[data-baseweb="select"] > div {
+            min-height: 3rem;
+            border-radius: 8px;
+            border-color: rgba(16, 24, 40, 0.16);
+            background: rgba(255, 255, 255, 0.96);
+        }
+
+        div[role="radiogroup"] {
+            display: flex;
+            gap: 0.45rem;
+            overflow-x: auto;
+            padding-bottom: 0.15rem;
+        }
+
+        div[role="radiogroup"] label {
+            min-height: 2.65rem;
+            border: 1px solid rgba(16, 24, 40, 0.13);
+            border-radius: 999px;
+            padding: 0.3rem 0.7rem;
+            background: rgba(255, 255, 255, 0.86);
+            white-space: nowrap;
+        }
+
+        div[role="radiogroup"] label:has(input:checked) {
+            border-color: rgba(220, 38, 38, 0.35);
+            background: rgba(220, 38, 38, 0.09);
+            color: var(--brand-dark);
+            font-weight: 800;
+        }
+
+        @media (min-width: 760px) {
+            .block-container {
+                padding-top: 2rem;
+            }
+
+            .hero {
+                padding: 1.6rem;
+            }
+
+            .app-title {
+                font-size: 3rem;
+            }
+
+            .detail-card {
+                margin-top: 1.2rem;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .block-container {
+                padding-inline: 0.7rem;
+            }
+
+            .hero {
+                padding: 1rem;
+            }
+
+            .app-title {
+                font-size: 1.85rem;
+            }
+
+            .stat-row {
+                grid-template-columns: 1fr;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-title {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+categories = sorted({technique["category"] for technique in JUDO_TECHNIQUES})
+category_options = ["Toutes"] + categories
+
+st.markdown(
+    f"""
+    <section class="hero">
+        <div class="hero-kicker">Catalogue vidéo</div>
+        <h1 class="app-title">Prises de judo</h1>
+        <p class="app-lead">Trouvez une technique, filtrez par famille, puis lancez la vidéo sans quitter l'application. L'écran est pensé pour une consultation rapide sur mobile.</p>
+    </section>
+    <div class="stat-row">
+        <div class="stat">
+            <div class="stat-value">{len(JUDO_TECHNIQUES)}</div>
+            <div class="stat-label">techniques</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">{len(categories)}</div>
+            <div class="stat-label">familles</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">vidéo</div>
+            <div class="stat-label">démo intégrée</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown('<div class="section-label">Recherche</div>', unsafe_allow_html=True)
+query = st.text_input(
+    "Rechercher une prise",
+    placeholder="Ex. o-soto, hanche, étranglement...",
+    label_visibility="collapsed",
+)
+
+st.markdown('<div class="section-label">Famille technique</div>', unsafe_allow_html=True)
+selected_category = st.radio(
+    "Famille technique",
+    category_options,
+    horizontal=True,
+    label_visibility="collapsed",
+)
+
+filtered_techniques = [
+    technique
+    for technique in JUDO_TECHNIQUES
+    if (selected_category == "Toutes" or technique["category"] == selected_category)
+    and technique_matches_query(technique, query)
+]
+
+if not filtered_techniques:
+    st.warning("Aucune prise ne correspond à votre recherche. Essayez un autre mot-clé ou une autre famille.")
+    st.stop()
+
+filtered_techniques = sorted(
+    filtered_techniques,
+    key=lambda technique: (technique["category"], technique["name"]),
+)
+
+st.markdown(
+    f'<div class="section-label">{len(filtered_techniques)} résultat(s)</div>',
+    unsafe_allow_html=True,
+)
+
+selected_name = st.selectbox(
+    "Technique",
+    [technique["name"] for technique in filtered_techniques],
+    label_visibility="collapsed",
+)
+
+preview_cards = []
+for technique in filtered_techniques[:6]:
+    details = CATEGORY_DETAILS.get(
+        technique["category"],
+        {"label": technique["category"], "accent": "#475467"},
+    )
+    preview_cards.append(
+        f"""
+        <article class="result-card">
+            <span class="category-chip" style="--chip-color: {details['accent']}">{escape(details['label'])}</span>
+            <div class="result-name">{escape(technique['name'])}</div>
+            <div class="result-description">{escape(technique['description'])}</div>
+        </article>
+        """
+    )
+
+st.markdown(
+    f'<div class="result-grid">{"".join(preview_cards)}</div>',
+    unsafe_allow_html=True,
+)
+
+selected_technique = next(
+    technique for technique in filtered_techniques if technique["name"] == selected_name
+)
+selected_details = CATEGORY_DETAILS.get(
+    selected_technique["category"],
+    {"label": selected_technique["category"], "accent": "#475467"},
+)
 video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
 
 st.markdown(
     f"""
-    <div class="tech-card-large">
-        <div class="tech-title">{selected_technique['name']}</div>
-        <div class="tech-meta">{selected_technique['category']} • {technique_count} prise(s) dans cette catégorie • {len(JUDO_TECHNIQUES)} techniques au total</div>
-        <div class="tech-description">{selected_technique['description']}</div>
+    <article class="detail-card">
         <div class="video-wrapper">
-            <iframe class="video-frame" src="{embed_url}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <div class="video-link">Regarder la vidéo complète sur <a href="{selected_technique['youtube']}" target="_blank">YouTube</a></div>
-    </div>
+        <div class="detail-body">
+            <span class="category-chip" style="--chip-color: {selected_details['accent']}">{escape(selected_details['label'])}</span>
+            <h2 class="tech-title">{escape(selected_technique['name'])}</h2>
+            <p class="tech-description">{escape(selected_technique['description'])}</p>
+            <a class="video-link" href="{escape(selected_technique['youtube'])}" target="_blank">Ouvrir sur YouTube</a>
+        </div>
+    </article>
     """,
     unsafe_allow_html=True,
 )
