@@ -465,29 +465,172 @@ JUDO_TECHNIQUES = [
     },
 ]
 
-st.title("🥋 Prises de judo")
-st.write(
-    "Sélectionnez une catégorie de techniques et une prise pour afficher une brève description "
-    "et la vidéo YouTube correspondante."
+st.markdown(
+    """
+    <style>
+        body {
+            background: linear-gradient(180deg, #f4f7fb 0%, #ffffff 100%);
+        }
+        .app-title {
+            font-size: 2.4rem;
+            margin-bottom: 0.25rem;
+            color: #0f172a;
+        }
+        .app-lead {
+            font-size: 1rem;
+            color: #334155;
+            max-width: 680px;
+            margin-bottom: 1.5rem;
+        }
+        .tech-card {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 22px;
+            padding: 1.6rem;
+            background: #ffffff;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
+            margin-bottom: 1.2rem;
+        }
+        .tech-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.4rem;
+        }
+        .tech-meta {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+        .tech-description {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: #334155;
+        }
+        .control-card {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 20px;
+            background: #ffffff;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+        }
+        .control-note {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+        .section-title {
+            margin-top: 1.5rem;
+            margin-bottom: 0.7rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-bottom: 1rem;
+        }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.55rem 0.9rem;
+            background: rgba(15, 23, 42, 0.05);
+            border-radius: 999px;
+            color: #0f172a;
+            font-size: 0.95rem;
+        }
+        .small-card {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 18px;
+            padding: 1rem;
+            background: #f8fafc;
+            margin-top: 1rem;
+        }
+        .streamlit-expanderHeader {
+            font-weight: 700;
+        }
+        @media (max-width: 768px) {
+            .app-title {font-size: 2rem;}
+            .tech-card {padding: 1.2rem;}
+            .control-card {padding: 1rem;}
+            .pill {font-size: 0.9rem; padding: 0.5rem 0.8rem;}
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown('<div class="app-title">🥋 Prises de judo</div>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="app-lead">Explorez les techniques de judo par catégorie, trouvez rapidement une prise et regardez la vidéo directement dans l’application. Le design est optimisé pour les petits écrans.</div>',
+    unsafe_allow_html=True,
 )
 
 categories = sorted({technique["category"] for technique in JUDO_TECHNIQUES})
-selected_category = st.sidebar.selectbox("Catégorie", categories)
 
-techniques_by_category = [
+with st.container():
+    st.markdown(
+        """
+        <div class="control-card">
+            <div class="control-note">Choisissez une catégorie et filtrez le nom de la prise pour trouver rapidement la technique souhaitée.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    control_col1, control_col2 = st.columns([2, 1], gap="medium")
+    with control_col1:
+        search = st.text_input("Recherche de prise", "", placeholder="Ex: Uchi-mata")
+    with control_col2:
+        selected_category = st.selectbox("Catégorie", categories)
+
+filtered_techniques = [
     technique
     for technique in JUDO_TECHNIQUES
     if technique["category"] == selected_category
+    and search.lower() in technique["name"].lower()
 ]
-technique_names = sorted(technique["name"] for technique in techniques_by_category)
-selected_name = st.sidebar.selectbox("Prise", technique_names)
 
-selected_technique = next(
-    technique for technique in techniques_by_category if technique["name"] == selected_name
+if not filtered_techniques:
+    st.warning("Aucune prise ne correspond à votre recherche. Essayez un autre mot-clé ou une autre catégorie.")
+    st.stop()
+
+selected_name = st.selectbox(
+    "Prise",
+    sorted(technique["name"] for technique in filtered_techniques),
 )
 
-st.subheader(f"{selected_technique['category']} — {selected_technique['name']}")
-st.markdown(f"**Description :** {selected_technique['description']}")
-st.markdown(f"**Vidéo YouTube :** [{selected_technique['youtube']}]({selected_technique['youtube']})")
+selected_technique = next(
+    technique for technique in filtered_techniques if technique["name"] == selected_name
+)
 
-st.video(selected_technique["youtube"])
+technique_count = len(filtered_techniques)
+category_count = len(categories)
+
+st.markdown(
+    f"""
+    <div class="tech-card">
+        <div class="tech-title">{selected_technique['category']} — {selected_technique['name']}</div>
+        <div class="tech-meta">{technique_count} prise(s) dans cette catégorie • {len(JUDO_TECHNIQUES)} techniques au total</div>
+        <div class="tech-description">{selected_technique['description']}</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+main_col, side_col = st.columns([2, 1], gap="large")
+with main_col:
+    st.subheader("Description rapide")
+    st.write(selected_technique["description"])
+    st.markdown("**Lien YouTube**")
+    st.markdown(f"[{selected_technique['youtube']}]({selected_technique['youtube']})")
+    if len(filtered_techniques) > 1:
+        other_techniques = [t["name"] for t in filtered_techniques if t["name"] != selected_name]
+        pills = "".join(f'<span class="pill">{name}</span>' for name in other_techniques[:10])
+        st.markdown("<div class='section-title'>Autres prises dans cette catégorie</div>" + f"<div class='pill-row'>{pills}</div>", unsafe_allow_html=True)
+with side_col:
+    st.subheader("Vidéo")
+    st.video(selected_technique["youtube"])
+    st.markdown(
+        "<div class='small-card'><strong>Conseil mobile :</strong> faites défiler la page vers le bas pour voir la vidéo en plein écran.</div>",
+        unsafe_allow_html=True,
+    )
