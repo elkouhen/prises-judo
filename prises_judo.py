@@ -1,6 +1,7 @@
 from html import escape
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Prises de judo",
@@ -663,6 +664,37 @@ def select_technique(name: str) -> None:
     st.session_state.selected_name = name
 
 
+def prevent_mobile_keyboard_on_selectboxes() -> None:
+    components.html(
+        """
+        <script>
+            function lockSelectInputs() {
+                const inputs = window.parent.document.querySelectorAll(
+                    '[data-baseweb="select"] input'
+                );
+
+                inputs.forEach((input) => {
+                    input.setAttribute('readonly', 'readonly');
+                    input.setAttribute('inputmode', 'none');
+                    input.setAttribute('autocomplete', 'off');
+                });
+            }
+
+            lockSelectInputs();
+            window.parent.setTimeout(lockSelectInputs, 250);
+            window.parent.setTimeout(lockSelectInputs, 750);
+
+            const observer = new MutationObserver(lockSelectInputs);
+            observer.observe(window.parent.document.body, {
+                childList: true,
+                subtree: true
+            });
+        </script>
+        """,
+        height=0,
+    )
+
+
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -705,6 +737,8 @@ with technique_column:
         label_visibility="collapsed",
         key="selected_name",
     )
+
+prevent_mobile_keyboard_on_selectboxes()
 
 current_index = technique_names.index(selected_name)
 previous_index = (current_index - 1) % len(technique_names)
