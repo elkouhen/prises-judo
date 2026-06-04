@@ -1,19 +1,21 @@
-# 💬 Chatbot template
+# 🥋 Prises de judo
 
-A simple Streamlit app that shows how to build a chatbot using OpenAI's GPT-3.5.
+Application Streamlit qui liste des techniques de judo par catégorie. Lorsqu'une prise est sélectionnée, l'application affiche une description rapide et une vidéo YouTube.
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://chatbot-template.streamlit.app/)
+### Comment l'utiliser
 
-### How to run it on your own machine
+1. Installez les dépendances
 
-1. Install the requirements
-
-   ```
-   $ pip install -r requirements.txt
+   ```bash
+   pip install -r requirements.txt
    ```
 
-2. Run the app
+2. Lancez l'application
 
+   ```bash
+   streamlit run streamlit_app.py
    ```
-   $ streamlit run streamlit_app.py
-   ```
+
+3. Dans la barre latérale, choisissez une catégorie puis une prise.
+
+4. La page montre une description de la technique et intègre la vidéo YouTube.
