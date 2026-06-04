@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Prises de judo",
@@ -311,7 +310,7 @@ def select_technique(name: str) -> None:
 
 
 def prevent_mobile_keyboard_on_selectboxes() -> None:
-    components.html(
+    st.html(
         """
         <script>
             function lockSelectInputs() {
@@ -336,13 +335,12 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
                 subtree: true
             });
         </script>
-        """,
-        height=0,
+        """
     )
 
 
 def add_landscape_swipe_navigation_js() -> None:
-    components.html(
+    st.html(
         """
         <script>
         (function() {
@@ -392,8 +390,7 @@ def add_landscape_swipe_navigation_js() -> None:
             observer.observe(doc.body, { childList: true, subtree: true });
         })();
         </script>
-        """,
-        height=0,
+        """
     )
 
 if "selected_category" not in st.session_state:
