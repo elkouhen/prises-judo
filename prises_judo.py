@@ -481,17 +481,21 @@ st.markdown(
     """
     <style>
         :root {
-            --ink: #101828;
-            --muted: #667085;
-            --line: rgba(16, 24, 40, 0.10);
-            --panel: rgba(255, 255, 255, 0.92);
-            --brand: #dc2626;
+            --ink: #172033;
+            --muted: #5b6475;
+            --line: rgba(23, 32, 51, 0.12);
+            --panel: rgba(255, 255, 255, 0.94);
+            --brand: #e11d48;
+            --brand-dark: #9f1239;
+            --sun: #fbbf24;
+            --mat: #14b8a6;
         }
 
         .stApp {
             background:
-                radial-gradient(circle at top, rgba(220, 38, 38, 0.10), transparent 20rem),
-                linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+                radial-gradient(circle at 14% 4%, rgba(251, 191, 36, 0.32), transparent 14rem),
+                radial-gradient(circle at 90% 0%, rgba(20, 184, 166, 0.24), transparent 16rem),
+                linear-gradient(180deg, #fff7ed 0%, #eefcf8 52%, #f8fafc 100%);
             color: var(--ink);
         }
 
@@ -507,11 +511,21 @@ st.markdown(
 
         .app-title {
             margin: 0 0 0.85rem;
-            color: var(--ink);
-            font-size: 1.45rem;
+            color: var(--brand-dark);
+            font-size: 1.75rem;
             font-weight: 900;
             line-height: 1.05;
             letter-spacing: 0;
+        }
+
+        .app-title::after {
+            content: "";
+            display: block;
+            width: 3.25rem;
+            height: 0.28rem;
+            border-radius: 999px;
+            margin-top: 0.45rem;
+            background: linear-gradient(90deg, var(--brand), var(--sun), var(--mat));
         }
 
         .tech-card {
@@ -524,16 +538,18 @@ st.markdown(
         }
 
         [data-testid="stVerticalBlockBorderWrapper"] {
-            border-color: var(--line);
+            border-color: rgba(225, 29, 72, 0.14);
             border-radius: 8px;
-            background: var(--panel);
-            box-shadow: 0 16px 44px rgba(16, 24, 40, 0.09);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 247, 237, 0.78)),
+                var(--panel);
+            box-shadow: 0 18px 46px rgba(23, 32, 51, 0.12);
             margin-top: 1rem;
         }
 
         .tech-title {
             margin: 0;
-            color: var(--ink);
+            color: var(--brand-dark);
             font-size: 1.65rem;
             line-height: 1.08;
             font-weight: 900;
@@ -566,8 +582,9 @@ st.markdown(
         .stSelectbox div[data-baseweb="select"] > div {
             min-height: 2.75rem;
             border-radius: 8px;
-            border-color: rgba(16, 24, 40, 0.16);
-            background: rgba(255, 255, 255, 0.96);
+            border-color: rgba(20, 184, 166, 0.26);
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 8px 22px rgba(20, 184, 166, 0.08);
         }
 
         .stSelectbox {
@@ -589,16 +606,17 @@ st.markdown(
             min-height: 2.75rem;
             width: 100%;
             border-radius: 8px;
-            border-color: rgba(16, 24, 40, 0.14);
-            background: rgba(255, 255, 255, 0.96);
-            color: var(--ink);
+            border-color: rgba(225, 29, 72, 0.18);
+            background: linear-gradient(135deg, #fff1f2 0%, #ffffff 100%);
+            color: var(--brand-dark);
             padding: 0;
             font-size: 1.3rem;
             font-weight: 800;
         }
 
         .stButton button:hover {
-            border-color: rgba(220, 38, 38, 0.42);
+            border-color: rgba(225, 29, 72, 0.42);
+            background: #ffe4e6;
             color: var(--brand);
         }
 
