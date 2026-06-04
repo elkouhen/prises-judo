@@ -175,6 +175,10 @@ st.markdown(
             margin-bottom: 0;
         }
 
+        .stButton {
+            display: none !important;
+        }
+
         [data-testid="stHorizontalBlock"] {
             align-items: stretch;
             column-gap: 0.35rem;
@@ -245,6 +249,10 @@ def reset_selected_name() -> None:
     st.session_state.selected_name = category_techniques[0]["name"]
 
 
+def select_technique(name: str) -> None:
+    st.session_state.selected_name = name
+
+
 def prevent_mobile_keyboard_on_selectboxes() -> None:
     components.html(
         """
@@ -275,6 +283,61 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
         height=0,
     )
 
+
+def add_landscape_swipe_navigation_js() -> None:
+    components.html(
+        """
+        <script>
+        (function() {
+            const doc = window.parent.document;
+
+            function isLandscape() {
+                const win = window.parent;
+                return win.innerWidth > win.innerHeight;
+            }
+
+            function prevBtn() {
+                return doc.querySelector('button[title="Technique précédente"]');
+            }
+
+            function nextBtn() {
+                return doc.querySelector('button[title="Technique suivante"]');
+            }
+
+            if (doc._judoSwipeBound) return;
+            doc._judoSwipeBound = true;
+
+            let startX = 0;
+            let startY = 0;
+
+            doc.addEventListener('touchstart', function(e) {
+                if (!isLandscape() || !e.touches.length) return;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+
+            doc.addEventListener('touchend', function(e) {
+                if (!isLandscape() || !e.changedTouches.length) return;
+
+                const dx = e.changedTouches[0].clientX - startX;
+                const dy = e.changedTouches[0].clientY - startY;
+
+                if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
+
+                if (dx < 0) {
+                    const btn = nextBtn();
+                    if (btn) btn.click();
+                } else {
+                    const btn = prevBtn();
+                    if (btn) btn.click();
+                }
+            }, { passive: true });
+        })();
+        </script>
+        """,
+        height=0,
+    )
+
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -286,6 +349,10 @@ if (
     or st.session_state.selected_name not in technique_names
 ):
     st.session_state.selected_name = technique_names[0]
+
+current_index = technique_names.index(st.session_state.selected_name)
+previous_index = (current_index - 1) % len(technique_names)
+next_index = (current_index + 1) % len(technique_names)
 
 prevent_mobile_keyboard_on_selectboxes()
 
@@ -335,6 +402,22 @@ with technique_column:
     )
 
 selected_technique = category_techniques[technique_names.index(selected_name)]
+add_landscape_swipe_navigation_js()
+
+st.button(
+    "←",
+    on_click=select_technique,
+    args=(technique_names[previous_index],),
+    help="Technique précédente",
+)
+
+st.button(
+    "→",
+    on_click=select_technique,
+    args=(technique_names[next_index],),
+    help="Technique suivante",
+)
+
 video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
 
