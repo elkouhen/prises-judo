@@ -79,6 +79,43 @@ st.markdown(
             border: 0;
         }
 
+        .app-title {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 0 0.4rem;
+            color: var(--ink);
+            font-size: 1.4rem;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: 0;
+        }
+
+        .app-title-mark {
+            display: inline-grid;
+            place-items: center;
+            flex: 0 0 auto;
+            width: 2.7rem;
+            height: 2.7rem;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: var(--panel);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            line-height: 1;
+        }
+
+        .app-title-mark svg {
+            width: 1.84rem;
+            height: 1.84rem;
+            display: block;
+        }
+
+        @media (orientation: portrait) {
+            .app-title {
+                display: inline-flex;
+            }
+        }
+
         .tech-description {
             display: none;
             margin: 0 0 0.75rem;
@@ -217,6 +254,26 @@ if (
     or st.session_state.selected_name not in technique_names
 ):
     st.session_state.selected_name = technique_names[0]
+
+st.markdown(
+    """
+    <h1 class="app-title">
+        <span class="app-title-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <polygon
+                    points="12,2.2 16.9,4.2 21.8,9.1 21.8,14.9 16.9,19.8 12,21.8 7.1,19.8 2.2,14.9 2.2,9.1 7.1,4.2"
+                    fill="#ffffff"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                />
+                <circle cx="12" cy="12" r="3.9" fill="#d01818" />
+            </svg>
+        </span>
+        <span>Prises de Judo</span>
+    </h1>
+    """,
+    unsafe_allow_html=True,
+)
 
 category_column, technique_column = st.columns([0.36, 0.64], gap="small")
 
