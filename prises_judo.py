@@ -629,15 +629,12 @@ st.markdown(
             margin-bottom: 0;
         }
 
-        [data-testid="stHorizontalBlock"] {
+        .control-row + div [data-testid="stHorizontalBlock"],
+        .card-head + div [data-testid="stHorizontalBlock"] {
             align-items: stretch;
             column-gap: 0.35rem;
             display: flex;
             flex-wrap: nowrap !important;
-        }
-
-        [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
-            min-width: 0 !important;
         }
 
         .stButton button {
@@ -672,6 +669,59 @@ st.markdown(
 
             .tech-title {
                 font-size: 1.85rem;
+            }
+        }
+
+        @media (max-width: 480px) and (orientation: portrait) {
+            .block-container {
+                padding: 0.7rem 0.65rem 2rem;
+            }
+
+            .app-header {
+                gap: 0.5rem;
+                margin-bottom: 0.55rem;
+            }
+
+            .app-title {
+                font-size: 1.42rem !important;
+            }
+
+            .title-mark {
+                width: 2.2rem;
+                height: 2.2rem;
+                font-size: 1.05rem;
+            }
+
+            .control-row + div [data-testid="stHorizontalBlock"] {
+                display: grid !important;
+                grid-template-columns: 1fr;
+                row-gap: 0.4rem;
+            }
+
+            .control-row + div [data-testid="stColumn"] {
+                width: 100% !important;
+            }
+
+            .card-head + div [data-testid="stHorizontalBlock"] {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) 2.35rem 2.35rem;
+                column-gap: 0.35rem;
+                align-items: start;
+            }
+
+            .card-head + div [data-testid="stColumn"] {
+                width: auto !important;
+                min-width: 0 !important;
+            }
+
+            .tech-title {
+                font-size: 1.28rem;
+                line-height: 1.12;
+            }
+
+            .tech-description {
+                font-size: 0.92rem;
+                line-height: 1.5;
             }
         }
     </style>
@@ -761,6 +811,7 @@ if (
 ):
     st.session_state.selected_name = technique_names[0]
 
+st.markdown('<div class="control-row"></div>', unsafe_allow_html=True)
 category_column, technique_column = st.columns(
     [0.40, 0.60],
     gap="small",
@@ -802,6 +853,7 @@ video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
 
 with st.container(border=True):
+    st.markdown('<div class="card-head"></div>', unsafe_allow_html=True)
     title_column, previous_column, next_column = st.columns([0.76, 0.12, 0.12], gap="small")
 
     with title_column:
