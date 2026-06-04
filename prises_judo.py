@@ -146,8 +146,13 @@ st.markdown(
             border: 0;
         }
 
-        .content-layout.is-expanded .tech-description {
+        /* Portrait et paysage : description masquée par défaut */
+        .tech-description {
             display: none;
+        }
+
+        .content-layout.is-expanded .tech-description {
+            display: block !important;
         }
 
         /* Portrait : description masquée par défaut, le bouton ⛶ permet de l'afficher */
@@ -245,7 +250,7 @@ st.markdown(
             }
         }
 
-        @media (orientation: landscape) and (max-height: 560px) and (max-width: 960px) {
+        @media (orientation: landscape) and (max-height: 700px) {
             .block-container {
                 max-width: 100% !important;
                 padding: 0.4rem 0.75rem 0.5rem;
@@ -286,7 +291,8 @@ st.markdown(
                 align-items: flex-start;
             }
 
-            .tech-description {
+            .content-layout.is-expanded .tech-description {
+                display: block !important;
                 flex: 0 0 32%;
                 min-width: 0;
                 margin-bottom: 0;
@@ -298,22 +304,29 @@ st.markdown(
                 flex: 1;
                 min-width: 0;
                 aspect-ratio: unset;
-                height: calc(100dvh - 200px);
+                height: calc(100dvh - 130px);
             }
 
-            /* Sélecteurs masqués par défaut, visibles si .selectors-visible sur le body */
+            /* Collapse total des sélecteurs + leurs wrappers */
             [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]) {
+                transition: max-height 0.25s ease, opacity 0.2s ease;
                 max-height: 200px;
-                overflow: hidden;
                 opacity: 1;
-                transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
+                overflow: hidden;
             }
 
-            body:not(.selectors-visible) [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]) {
-                max-height: 0;
-                opacity: 0;
+            body:not(.selectors-visible) [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]),
+            body:not(.selectors-visible) [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]) * {
+                max-height: 0 !important;
+                min-height: 0 !important;
+                height: 0 !important;
+                opacity: 0 !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
                 margin-top: 0 !important;
                 margin-bottom: 0 !important;
+                overflow: hidden !important;
+                border: none !important;
             }
         }
 
@@ -340,7 +353,7 @@ st.markdown(
             background: rgba(31, 75, 110, 0.10);
         }
 
-        @media (orientation: landscape) and (max-height: 560px) and (max-width: 960px) {
+        @media (orientation: landscape) and (max-height: 700px) {
             #selector-toggle {
                 display: block;
             }
