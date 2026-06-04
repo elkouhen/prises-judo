@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Prises de judo",
@@ -54,58 +53,12 @@ st.markdown(
             display: none;
         }
 
-        .app-header {
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-            margin: 0 0 0.8rem;
-        }
-
-        .title-mark {
-            display: grid;
-            place-items: center;
-            flex: 0 0 auto;
-            width: 2.35rem;
-            height: 2.35rem;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            background: var(--panel);
-            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
-            font-size: 1.15rem;
-        }
-
-        .app-title {
-            margin: 0 !important;
-            color: var(--ink) !important;
-            font-size: 1.55rem !important;
-            font-weight: 800 !important;
-            line-height: 1.05 !important;
-            letter-spacing: 0 !important;
-        }
-
         [data-testid="stVerticalBlockBorderWrapper"] {
             border: 1px solid var(--line);
             border-radius: 8px;
             background: var(--panel);
             box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
             margin-top: 0.75rem;
-        }
-
-        .tech-title {
-            margin: 0;
-            color: var(--ink);
-            font-size: 1.4rem;
-            line-height: 1.1;
-            font-weight: 800;
-            letter-spacing: 0;
-            overflow-wrap: anywhere;
-        }
-
-        .tech-description {
-            margin: 0 0 0.75rem;
-            color: var(--muted);
-            font-size: 0.95rem;
-            line-height: 1.55;
         }
 
         .video-wrapper {
@@ -126,23 +79,17 @@ st.markdown(
             border: 0;
         }
 
-        /* Portrait et paysage : description masquée par défaut */
         .tech-description {
             display: none;
+            margin: 0 0 0.75rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.55;
         }
 
-        .content-layout.is-expanded .tech-description {
-            display: block !important;
-        }
-
-        /* Portrait : description masquée par défaut, le bouton ⛶ permet de l'afficher */
         @media (orientation: portrait) {
             .tech-description {
-                display: none;
-            }
-
-            .content-layout.is-expanded .tech-description {
-                display: block !important;
+                display: block;
             }
         }
 
@@ -152,6 +99,13 @@ st.markdown(
             border-color: rgba(17, 24, 39, 0.14);
             background: rgba(255, 255, 255, 0.96);
             box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+        }
+
+        .stSelectbox div[data-baseweb="select"] [role="combobox"],
+        .stSelectbox div[data-baseweb="select"] span {
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .stSelectbox div[data-baseweb="select"] span,
@@ -198,42 +152,6 @@ st.markdown(
             display: none;
         }
 
-        .stButton button {
-            min-height: 2.35rem;
-            width: 100%;
-            border-radius: 8px;
-            border: 1px solid rgba(31, 75, 110, 0.22);
-            background: #ffffff;
-            color: var(--ink);
-            padding: 0.35rem 0.45rem;
-            font-size: 0.86rem;
-            font-weight: 700;
-            line-height: 1.05;
-            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
-        }
-
-        .stButton button:hover {
-            border-color: rgba(31, 75, 110, 0.42);
-            background: var(--accent-soft);
-            color: var(--ink);
-        }
-
-        @media (min-width: 760px) {
-            .app-title {
-                font-size: 1.8rem !important;
-            }
-
-            .title-mark {
-                width: 2.65rem;
-                height: 2.65rem;
-                font-size: 1.35rem;
-            }
-
-            .tech-title {
-                font-size: 1.7rem;
-            }
-        }
-
         @media (orientation: landscape) and (max-height: 920px) {
             .block-container {
                 max-width: 100% !important;
@@ -244,71 +162,15 @@ st.markdown(
                 gap: 0.35rem;
             }
 
-            .app-header {
-                display: none;
-            }
-
             [data-testid="stVerticalBlockBorderWrapper"] {
                 margin-top: 0;
             }
 
-            [data-testid="stVerticalBlockBorderWrapper"] > div {
-                padding: 0.65rem !important;
-            }
-
-            .tech-title {
-                display: none;
-            }
-
-            .content-layout {
-                display: flex;
-                gap: 0.75rem;
-                align-items: flex-start;
-            }
-
-            [data-testid="stColumn"]:has(.tech-title) {
-                display: none;
-            }
-
-            .tech-description {
-                display: none !important;
-            }
-
             .video-wrapper {
-                flex: 1 1 auto;
-                min-width: 0;
-                width: 100%;
-                aspect-ratio: 16 / 9;
-                height: min(calc(100dvh - 122px), calc((100vw - 1.5rem) * 9 / 16));
-            }
-        }
-
-        #selector-toggle {
-            display: none;
-            position: fixed;
-            top: 0.45rem;
-            right: 0.5rem;
-            z-index: 9999;
-            background: #ffffff;
-            border: 1px solid rgba(31, 75, 110, 0.22);
-            border-radius: 8px;
-            padding: 0.3rem 0.65rem;
-            font-size: 0.92rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
-            color: #111827;
-            line-height: 1;
-        }
-
-        #selector-toggle:hover {
-            border-color: rgba(31, 75, 110, 0.42);
-            background: rgba(31, 75, 110, 0.10);
-        }
-
-        @media (orientation: landscape) and (max-height: 920px) {
-            #selector-toggle {
-                display: block;
+                aspect-ratio: auto;
+                height: calc(100dvh - 170px);
+                max-height: calc(100dvh - 170px);
+                min-height: 260px;
             }
         }
 
@@ -316,45 +178,8 @@ st.markdown(
             .block-container {
                 padding: 0.7rem 0.65rem 2rem;
             }
-
-            .app-header {
-                gap: 0.5rem;
-                margin-bottom: 0.55rem;
-            }
-
-            .app-title {
-                font-size: 1.42rem !important;
-            }
-
-            .title-mark {
-                width: 2.2rem;
-                height: 2.2rem;
-                font-size: 1.05rem;
-            }
-
-            .tech-title {
-                font-size: 1.2rem;
-                line-height: 1.12;
-            }
-
-            .tech-description {
-                font-size: 0.92rem;
-                line-height: 1.5;
-            }
         }
     </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    """
-    <div class="app-header">
-        <div class="title-mark">🥋</div>
-        <div>
-            <h1 class="app-title">Prises de Judo</h1>
-        </div>
-    </div>
     """,
     unsafe_allow_html=True,
 )
@@ -381,193 +206,6 @@ def reset_selected_name() -> None:
     category_techniques = get_category_techniques(st.session_state.selected_category)
     st.session_state.selected_name = category_techniques[0]["name"]
 
-
-def select_technique(name: str) -> None:
-    st.session_state.selected_name = name
-
-
-def toggle_video_expanded() -> None:
-    st.session_state.video_expanded = not st.session_state.get("video_expanded", False)
-
-
-def prevent_mobile_keyboard_on_selectboxes() -> None:
-    components.html(
-        """
-        <script>
-            function lockSelectInputs() {
-                const inputs = window.parent.document.querySelectorAll(
-                    '[data-baseweb="select"] input'
-                );
-
-                inputs.forEach((input) => {
-                    input.setAttribute('readonly', 'readonly');
-                    input.setAttribute('inputmode', 'none');
-                    input.setAttribute('autocomplete', 'off');
-                });
-            }
-
-            lockSelectInputs();
-            window.parent.setTimeout(lockSelectInputs, 250);
-            window.parent.setTimeout(lockSelectInputs, 750);
-
-            const observer = new MutationObserver(lockSelectInputs);
-            observer.observe(window.parent.document.body, {
-                childList: true,
-                subtree: true
-            });
-        </script>
-        """,
-        height=0,
-    )
-
-
-def add_swipe_navigation_js() -> None:
-    components.html(
-        """
-        <script>
-        (function() {
-            const doc = window.parent.document;
-
-            function prevBtn() {
-                return doc.querySelector('button[title="Technique précédente"]');
-            }
-            function nextBtn() {
-                return doc.querySelector('button[title="Technique suivante"]');
-            }
-
-            // Swipe navigation
-            if (!doc._swipeNavBound) {
-                doc._swipeNavBound = true;
-
-                let startX = 0, startY = 0;
-
-                doc.addEventListener('touchstart', function(e) {
-                    startX = e.touches[0].clientX;
-                    startY = e.touches[0].clientY;
-                }, { passive: true });
-
-                doc.addEventListener('touchend', function(e) {
-                    const dx = e.changedTouches[0].clientX - startX;
-                    const dy = e.changedTouches[0].clientY - startY;
-
-                    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
-
-                    if (dx < 0) { const b = nextBtn(); if (b) b.click(); }
-                    else        { const b = prevBtn(); if (b) b.click(); }
-                }, { passive: true });
-            }
-
-            // Keyboard navigation
-            if (!doc._keyNavBound) {
-                doc._keyNavBound = true;
-
-                doc.addEventListener('keydown', function(e) {
-                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-                    if (e.key === 'ArrowLeft')  { const b = prevBtn(); if (b) { b.click(); e.preventDefault(); } }
-                    if (e.key === 'ArrowRight') { const b = nextBtn(); if (b) { b.click(); e.preventDefault(); } }
-                }, true);
-            }
-        })();
-        </script>
-        """,
-        height=0,
-    )
-
-
-def add_landscape_selectors_toggle_js() -> None:
-    components.html(
-        """
-        <script>
-        (function() {
-            const doc = window.parent.document;
-            const VERSION = 4;
-
-            // Disconnect previous observer if any older version ran
-            if (doc._selectorToggleVersion === VERSION) return;
-            doc._selectorToggleVersion = VERSION;
-            if (doc._selectorObserver) { doc._selectorObserver.disconnect(); }
-
-            let visible = false;
-            let applying = false;
-
-            function isLandscape() {
-                const win = window.parent;
-                return win.innerWidth > win.innerHeight;
-            }
-
-            // Find the direct child of the main stVerticalBlock that contains the selects
-            function getSelectorRow() {
-                const select = doc.querySelector('[data-baseweb="select"]');
-                if (!select) return null;
-                // The first stVerticalBlock in document order is the main layout container
-                const mainBlock = doc.querySelector('[data-testid="stVerticalBlock"]');
-                if (!mainBlock) return null;
-                for (const child of mainBlock.children) {
-                    if (child.contains(select)) return child;
-                }
-                return null;
-            }
-
-            function applyVisibility() {
-                if (applying) return;
-                applying = true;
-                try {
-                    if (!isLandscape()) return;
-                    const row = getSelectorRow();
-                    if (!row) return;
-                    if (visible) {
-                        row.removeAttribute('data-judo-hidden');
-                        row.style.removeProperty('display');
-                    } else {
-                        row.setAttribute('data-judo-hidden', '1');
-                        row.style.setProperty('display', 'none', 'important');
-                    }
-                } finally {
-                    applying = false;
-                }
-            }
-
-            // Apply on load with retries to ensure DOM is ready
-            applyVisibility();
-            setTimeout(applyVisibility, 300);
-            setTimeout(applyVisibility, 800);
-
-            // Re-apply after every Streamlit rerender (debounced)
-            let debounceTimer = null;
-            const observer = new MutationObserver(function() {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(applyVisibility, 50);
-            });
-            observer.observe(doc.body, { childList: true, subtree: false });
-            doc._selectorObserver = observer;
-
-            // Create or re-use the toggle button
-            let btn = doc.getElementById('selector-toggle');
-            if (!btn) {
-                btn = doc.createElement('button');
-                btn.id = 'selector-toggle';
-                btn.title = 'Afficher / masquer les filtres';
-                doc.body.appendChild(btn);
-            }
-
-            function updateLabel() {
-                btn.textContent = visible ? '✕' : '⚙';
-            }
-
-            btn.onclick = function() {
-                visible = !visible;
-                applyVisibility();
-                updateLabel();
-            };
-
-            updateLabel();
-        })();
-        </script>
-        """,
-        height=0,
-    )
-
-
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -580,10 +218,7 @@ if (
 ):
     st.session_state.selected_name = technique_names[0]
 
-category_column, technique_column = st.columns(
-    [0.36, 0.64],
-    gap="small",
-)
+category_column, technique_column = st.columns([0.36, 0.64], gap="small")
 
 with category_column:
     selected_category = st.selectbox(
@@ -597,77 +232,30 @@ with category_column:
 
 category_techniques = get_category_techniques(selected_category)
 technique_names = [technique["name"] for technique in category_techniques]
-current_index = technique_names.index(st.session_state.selected_name)
-previous_index = (current_index - 1) % len(technique_names)
-next_index = (current_index + 1) % len(technique_names)
 
 with technique_column:
     selected_name = st.selectbox(
         "Prise",
         technique_names,
-        index=current_index,
+        index=technique_names.index(st.session_state.selected_name),
         format_func=format_technique_name,
         label_visibility="collapsed",
         key="selected_name",
     )
 
-prevent_mobile_keyboard_on_selectboxes()
-add_swipe_navigation_js()
-add_landscape_selectors_toggle_js()
-
-current_index = technique_names.index(selected_name)
-previous_index = (current_index - 1) % len(technique_names)
-next_index = (current_index + 1) % len(technique_names)
-selected_technique = category_techniques[current_index]
+selected_technique = category_techniques[technique_names.index(selected_name)]
 video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
 
 with st.container(border=True):
-    title_column, previous_column, next_column, expand_column = st.columns(
-        [0.55, 0.15, 0.15, 0.15], gap="small"
+    st.markdown(
+        f'<p class="tech-description">{escape(selected_technique["description"])}</p>',
+        unsafe_allow_html=True,
     )
-
-    with title_column:
-        st.markdown(
-            f'<h2 class="tech-title">{escape(format_technique_name(selected_technique["name"]))}</h2>',
-            unsafe_allow_html=True,
-        )
-
-    with previous_column:
-        st.button(
-            "←",
-            use_container_width=True,
-            on_click=select_technique,
-            args=(technique_names[previous_index],),
-            help="Technique précédente",
-        )
-
-    with next_column:
-        st.button(
-            "→",
-            use_container_width=True,
-            on_click=select_technique,
-            args=(technique_names[next_index],),
-            help="Technique suivante",
-        )
-
-    with expand_column:
-        is_expanded = st.session_state.get("video_expanded", False)
-        st.button(
-            "⊟" if is_expanded else "⛶",
-            use_container_width=True,
-            on_click=toggle_video_expanded,
-            help="Masquer la description" if is_expanded else "Voir la description / Agrandir la vidéo",
-        )
-
-    content_class = "content-layout is-expanded" if st.session_state.get("video_expanded", False) else "content-layout"
     st.markdown(
         f"""
-        <div class="{content_class}">
-            <p class="tech-description">{escape(selected_technique["description"])}</p>
-            <div class="video-wrapper">
-                <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
+        <div class="video-wrapper">
+            <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         """,
         unsafe_allow_html=True,
