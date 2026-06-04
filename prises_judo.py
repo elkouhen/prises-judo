@@ -230,6 +230,63 @@ st.markdown(
             }
         }
 
+        @media (orientation: landscape) and (max-height: 560px) and (max-width: 960px) {
+            .block-container {
+                max-width: 100% !important;
+                padding: 0.4rem 0.75rem 0.5rem;
+            }
+
+            .app-header {
+                gap: 0.4rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .app-title {
+                font-size: 1.2rem !important;
+            }
+
+            .title-mark {
+                width: 1.9rem;
+                height: 1.9rem;
+                font-size: 0.95rem;
+            }
+
+            [data-testid="stVerticalBlockBorderWrapper"] {
+                margin-top: 0.3rem;
+            }
+
+            .tech-title {
+                font-size: 1.1rem;
+            }
+
+            .tech-link {
+                font-size: 0.8rem;
+                padding: 0.2rem 0.45rem;
+                margin-top: 0.2rem;
+            }
+
+            .content-layout {
+                display: flex;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+
+            .tech-description {
+                flex: 0 0 32%;
+                min-width: 0;
+                margin-bottom: 0;
+                font-size: 0.88rem;
+                line-height: 1.45;
+            }
+
+            .video-wrapper {
+                flex: 1;
+                min-width: 0;
+                aspect-ratio: unset;
+                height: calc(100dvh - 200px);
+            }
+        }
+
         @media (max-width: 480px) and (orientation: portrait) {
             .block-container {
                 padding: 0.7rem 0.65rem 2rem;
@@ -420,13 +477,12 @@ with st.container(border=True):
         )
 
     st.markdown(
-        f'<p class="tech-description">{escape(selected_technique["description"])}</p>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
         f"""
-        <div class="video-wrapper">
-            <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="content-layout">
+            <p class="tech-description">{escape(selected_technique["description"])}</p>
+            <div class="video-wrapper">
+                <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
