@@ -282,7 +282,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-categories = sorted({technique["category"] for technique in JUDO_TECHNIQUES})
+categories = list(dict.fromkeys(technique["category"] for technique in JUDO_TECHNIQUES))
 
 
 def get_category_techniques(category: str) -> list[dict[str, str]]:
