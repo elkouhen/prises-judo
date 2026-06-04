@@ -204,15 +204,19 @@ st.markdown(
                 gap: 0.35rem;
             }
 
+            [data-testid="stHorizontalBlock"]:has(.stSelectbox) {
+                display: none;
+            }
+
             [data-testid="stVerticalBlockBorderWrapper"] {
                 margin-top: 0;
             }
 
             .video-wrapper {
                 aspect-ratio: auto;
-                height: calc(100vh - 155px);
-                max-height: calc(100vh - 155px);
-                min-height: 240px;
+                height: calc(100vh - 105px);
+                max-height: calc(100vh - 105px);
+                min-height: 260px;
             }
         }
 
