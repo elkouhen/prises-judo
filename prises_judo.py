@@ -289,6 +289,50 @@ st.markdown(
                 aspect-ratio: unset;
                 height: calc(100dvh - 200px);
             }
+
+            /* Sélecteurs masqués par défaut, visibles si .selectors-visible sur le body */
+            [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]) {
+                max-height: 200px;
+                overflow: hidden;
+                opacity: 1;
+                transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
+            }
+
+            body:not(.selectors-visible) [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]) {
+                max-height: 0;
+                opacity: 0;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+        }
+
+        #selector-toggle {
+            display: none;
+            position: fixed;
+            top: 0.45rem;
+            right: 0.5rem;
+            z-index: 9999;
+            background: #ffffff;
+            border: 1px solid rgba(31, 75, 110, 0.22);
+            border-radius: 8px;
+            padding: 0.3rem 0.65rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+            color: #111827;
+            line-height: 1;
+        }
+
+        #selector-toggle:hover {
+            border-color: rgba(31, 75, 110, 0.42);
+            background: rgba(31, 75, 110, 0.10);
+        }
+
+        @media (orientation: landscape) and (max-height: 560px) and (max-width: 960px) {
+            #selector-toggle {
+                display: block;
+            }
         }
 
         @media (max-width: 480px) and (orientation: portrait) {
@@ -445,6 +489,38 @@ def add_swipe_navigation_js() -> None:
     )
 
 
+def add_landscape_selectors_toggle_js() -> None:
+    components.html(
+        """
+        <script>
+        (function() {
+            const doc = window.parent.document;
+
+            if (doc._selectorToggleBound) return;
+            doc._selectorToggleBound = true;
+
+            const btn = doc.createElement('button');
+            btn.id = 'selector-toggle';
+            btn.title = 'Afficher / masquer les filtres';
+
+            function updateLabel() {
+                btn.textContent = doc.body.classList.contains('selectors-visible') ? '✕' : '⚙';
+            }
+
+            btn.addEventListener('click', function() {
+                doc.body.classList.toggle('selectors-visible');
+                updateLabel();
+            });
+
+            updateLabel();
+            doc.body.appendChild(btn);
+        })();
+        </script>
+        """,
+        height=0,
+    )
+
+
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -490,6 +566,7 @@ with technique_column:
 
 prevent_mobile_keyboard_on_selectboxes()
 add_swipe_navigation_js()
+add_landscape_selectors_toggle_js()
 
 current_index = technique_names.index(selected_name)
 previous_index = (current_index - 1) % len(technique_names)
