@@ -396,6 +396,47 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
     )
 
 
+def add_swipe_navigation_js() -> None:
+    components.html(
+        """
+        <script>
+        (function() {
+            const doc = window.parent.document;
+
+            function prevBtn() {
+                return doc.querySelector('button[title="Technique précédente"]');
+            }
+            function nextBtn() {
+                return doc.querySelector('button[title="Technique suivante"]');
+            }
+
+            if (doc._swipeNavBound) return;
+            doc._swipeNavBound = true;
+
+            let startX = 0, startY = 0;
+
+            doc.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, { passive: true });
+
+            doc.addEventListener('touchend', function(e) {
+                const dx = e.changedTouches[0].clientX - startX;
+                const dy = e.changedTouches[0].clientY - startY;
+
+                // Ignore short swipes or mostly vertical gestures
+                if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
+
+                if (dx < 0) { const b = nextBtn(); if (b) b.click(); }
+                else        { const b = prevBtn(); if (b) b.click(); }
+            }, { passive: true });
+        })();
+        </script>
+        """,
+        height=0,
+    )
+
+
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -440,6 +481,7 @@ with technique_column:
     )
 
 prevent_mobile_keyboard_on_selectboxes()
+add_swipe_navigation_js()
 
 current_index = technique_names.index(selected_name)
 previous_index = (current_index - 1) % len(technique_names)
@@ -460,7 +502,7 @@ with st.container(border=True):
 
     with previous_column:
         st.button(
-            "← Préc.",
+            "←",
             use_container_width=True,
             on_click=select_technique,
             args=(technique_names[previous_index],),
@@ -469,7 +511,7 @@ with st.container(border=True):
 
     with next_column:
         st.button(
-            "Suiv. →",
+            "→",
             use_container_width=True,
             on_click=select_technique,
             args=(technique_names[next_index],),
