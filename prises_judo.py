@@ -630,7 +630,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<h1 class="app-title">Prises de Judo</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="app-title">🥋 Prises de Judo</h1>', unsafe_allow_html=True)
 
 categories = sorted({technique["category"] for technique in JUDO_TECHNIQUES})
 
