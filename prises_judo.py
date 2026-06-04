@@ -235,14 +235,18 @@ st.markdown(
             }
 
             .video-wrapper {
+                position: fixed !important;
+                inset: 0 !important;
                 aspect-ratio: auto !important;
                 width: 100vw !important;
                 height: 100vh !important;
                 height: 100dvh !important;
-                max-width: 100% !important;
+                max-width: 100vw !important;
                 margin: 0 !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
+                z-index: 9000 !important;
+                background: #000 !important;
             }
 
             .judo-landscape-nav {
