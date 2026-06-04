@@ -629,16 +629,20 @@ st.markdown(
             margin-bottom: 0;
         }
 
-        .control-row + div [data-testid="stHorizontalBlock"],
-        .card-head + div [data-testid="stHorizontalBlock"] {
+        [data-testid="stHorizontalBlock"] {
             align-items: stretch;
             column-gap: 0.35rem;
             display: flex;
             flex-wrap: nowrap !important;
         }
 
+        [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+            min-width: 0 !important;
+        }
+
         .stButton button {
             min-height: 2.35rem;
+            max-height: 2.35rem;
             width: 100%;
             border-radius: 8px;
             border-color: rgba(34, 211, 238, 0.34);
@@ -692,30 +696,8 @@ st.markdown(
                 font-size: 1.05rem;
             }
 
-            .control-row + div [data-testid="stHorizontalBlock"] {
-                display: grid !important;
-                grid-template-columns: 1fr;
-                row-gap: 0.4rem;
-            }
-
-            .control-row + div [data-testid="stColumn"] {
-                width: 100% !important;
-            }
-
-            .card-head + div [data-testid="stHorizontalBlock"] {
-                display: grid !important;
-                grid-template-columns: minmax(0, 1fr) 2.35rem 2.35rem;
-                column-gap: 0.35rem;
-                align-items: start;
-            }
-
-            .card-head + div [data-testid="stColumn"] {
-                width: auto !important;
-                min-width: 0 !important;
-            }
-
             .tech-title {
-                font-size: 1.28rem;
+                font-size: 1.22rem;
                 line-height: 1.12;
             }
 
@@ -811,9 +793,8 @@ if (
 ):
     st.session_state.selected_name = technique_names[0]
 
-st.markdown('<div class="control-row"></div>', unsafe_allow_html=True)
 category_column, technique_column = st.columns(
-    [0.40, 0.60],
+    [0.36, 0.64],
     gap="small",
 )
 
@@ -853,8 +834,7 @@ video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
 
 with st.container(border=True):
-    st.markdown('<div class="card-head"></div>', unsafe_allow_html=True)
-    title_column, previous_column, next_column = st.columns([0.76, 0.12, 0.12], gap="small")
+    title_column, previous_column, next_column = st.columns([0.72, 0.14, 0.14], gap="small")
 
     with title_column:
         st.markdown(
