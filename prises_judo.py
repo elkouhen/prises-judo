@@ -1,6 +1,8 @@
 from html import escape
+import json
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Prises de judo",
@@ -579,18 +581,6 @@ st.markdown(
             border: 0;
         }
 
-        .stSelectbox div[data-baseweb="select"] > div {
-            min-height: 2.75rem;
-            border-radius: 8px;
-            border-color: rgba(20, 184, 166, 0.26);
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 8px 22px rgba(20, 184, 166, 0.08);
-        }
-
-        .stSelectbox {
-            margin-bottom: 0;
-        }
-
         [data-testid="stHorizontalBlock"] {
             align-items: stretch;
             column-gap: 0.35rem;
@@ -646,56 +636,119 @@ def get_category_techniques(category: str) -> list[dict[str, str]]:
     )
 
 
-def reset_selected_name() -> None:
-    category_techniques = get_category_techniques(st.session_state.selected_category)
-    st.session_state.selected_name = category_techniques[0]["name"]
-
-
 def select_technique(name: str) -> None:
-    st.session_state.selected_name = name
+    st.query_params.update(categorie=selected_category, prise=name)
 
 
-if "selected_category" not in st.session_state:
-    st.session_state.selected_category = categories[0]
+def get_query_value(key: str):
+    value = st.query_params.get(key)
+    if isinstance(value, list):
+        return value[0] if value else None
+    return value
 
-category_techniques = get_category_techniques(st.session_state.selected_category)
-technique_names = [technique["name"] for technique in category_techniques]
 
-if (
-    "selected_name" not in st.session_state
-    or st.session_state.selected_name not in technique_names
-):
-    st.session_state.selected_name = technique_names[0]
+def render_select_controls(
+    categories: list[str],
+    techniques_by_category: dict[str, list[str]],
+    selected_category: str,
+    selected_name: str,
+) -> None:
+    controls_html = f"""
+    <style>
+        body {{
+            margin: 0;
+            background: transparent;
+        }}
 
-category_column, technique_column = st.columns(
-    [0.40, 0.60],
-    gap="small",
-)
+        .select-row {{
+            display: grid;
+            grid-template-columns: 0.4fr 0.6fr;
+            gap: 0.35rem;
+        }}
 
-with category_column:
-    selected_category = st.selectbox(
-        "Catégorie",
-        categories,
-        index=categories.index(st.session_state.selected_category),
-        label_visibility="collapsed",
-        key="selected_category",
-        on_change=reset_selected_name,
-    )
+        .select-row select {{
+            min-width: 0;
+            width: 100%;
+            min-height: 2.75rem;
+            border: 1px solid rgba(20, 184, 166, 0.26);
+            border-radius: 8px;
+            padding: 0 2rem 0 0.75rem;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 8px 22px rgba(20, 184, 166, 0.08);
+            color: #172033;
+            font: 600 0.92rem system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }}
+
+        .select-row select:focus {{
+            border-color: rgba(225, 29, 72, 0.42);
+            outline: none;
+        }}
+    </style>
+    <div class="select-row">
+        <select id="categorySelect" aria-label="Catégorie"></select>
+        <select id="techniqueSelect" aria-label="Prise"></select>
+    </div>
+    <script>
+        const categories = {json.dumps(categories, ensure_ascii=False)};
+        const techniquesByCategory = {json.dumps(techniques_by_category, ensure_ascii=False)};
+        const selectedCategory = {json.dumps(selected_category, ensure_ascii=False)};
+        const selectedName = {json.dumps(selected_name, ensure_ascii=False)};
+        const categorySelect = document.getElementById("categorySelect");
+        const techniqueSelect = document.getElementById("techniqueSelect");
+
+        function option(value, selectedValue) {{
+            const element = document.createElement("option");
+            element.value = value;
+            element.textContent = value;
+            element.selected = value === selectedValue;
+            return element;
+        }}
+
+        function fillTechniques(category, selectedTechnique) {{
+            techniqueSelect.replaceChildren(
+                ...techniquesByCategory[category].map((name) => option(name, selectedTechnique))
+            );
+        }}
+
+        categorySelect.replaceChildren(...categories.map((category) => option(category, selectedCategory)));
+        fillTechniques(selectedCategory, selectedName);
+
+        function updateSelection(category, technique) {{
+            const params = new URLSearchParams(window.parent.location.search);
+            params.set("categorie", category);
+            params.set("prise", technique);
+            window.parent.location.search = params.toString();
+        }}
+
+        categorySelect.addEventListener("change", () => {{
+            const category = categorySelect.value;
+            updateSelection(category, techniquesByCategory[category][0]);
+        }});
+
+        techniqueSelect.addEventListener("change", () => {{
+            updateSelection(categorySelect.value, techniqueSelect.value);
+        }});
+    </script>
+    """
+    components.html(controls_html, height=50)
+
+
+techniques_by_category = {
+    category: [technique["name"] for technique in get_category_techniques(category)]
+    for category in categories
+}
+
+selected_category = get_query_value("categorie") or categories[0]
+if selected_category not in categories:
+    selected_category = categories[0]
 
 category_techniques = get_category_techniques(selected_category)
 technique_names = [technique["name"] for technique in category_techniques]
-current_index = technique_names.index(st.session_state.selected_name)
-previous_index = (current_index - 1) % len(technique_names)
-next_index = (current_index + 1) % len(technique_names)
+selected_name = get_query_value("prise") or technique_names[0]
+if selected_name not in technique_names:
+    selected_name = technique_names[0]
 
-with technique_column:
-    selected_name = st.selectbox(
-        "Prise",
-        technique_names,
-        index=current_index,
-        label_visibility="collapsed",
-        key="selected_name",
-    )
+render_select_controls(categories, techniques_by_category, selected_category, selected_name)
 
 current_index = technique_names.index(selected_name)
 previous_index = (current_index - 1) % len(technique_names)
