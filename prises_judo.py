@@ -646,8 +646,12 @@ def get_category_techniques(category: str) -> list[dict[str, str]]:
             for technique in JUDO_TECHNIQUES
             if technique["category"] == category
         ],
-        key=lambda technique: technique["name"],
+        key=lambda technique: format_technique_name(technique["name"]),
     )
+
+
+def format_technique_name(name: str) -> str:
+    return name.replace("-", " ")
 
 
 def reset_selected_name() -> None:
@@ -697,6 +701,7 @@ with technique_column:
         "Prise",
         technique_names,
         index=current_index,
+        format_func=format_technique_name,
         label_visibility="collapsed",
         key="selected_name",
     )
@@ -713,7 +718,7 @@ with st.container(border=True):
 
     with title_column:
         st.markdown(
-            f'<h2 class="tech-title">{escape(selected_technique["name"])}</h2>',
+            f'<h2 class="tech-title">{escape(format_technique_name(selected_technique["name"]))}</h2>',
             unsafe_allow_html=True,
         )
 
