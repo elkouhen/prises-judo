@@ -101,26 +101,6 @@ st.markdown(
             overflow-wrap: anywhere;
         }
 
-        .tech-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            margin-top: 0.3rem;
-            color: var(--accent);
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 0.28rem 0.55rem;
-            border-radius: 999px;
-            background: var(--accent-soft);
-            border: 1px solid rgba(31, 75, 110, 0.16);
-        }
-
-        .tech-link:hover {
-            background: rgba(31, 75, 110, 0.16);
-            color: var(--accent);
-        }
-
         .tech-description {
             margin: 0 0 0.75rem;
             color: var(--muted);
@@ -214,6 +194,10 @@ st.markdown(
             min-width: 0 !important;
         }
 
+        [data-testid="stElementContainer"]:has(iframe[height="0"]) {
+            display: none;
+        }
+
         .stButton button {
             min-height: 2.35rem;
             width: 100%;
@@ -250,39 +234,30 @@ st.markdown(
             }
         }
 
-        @media (orientation: landscape) and (max-height: 700px) {
+        @media (orientation: landscape) and (max-height: 920px) {
             .block-container {
                 max-width: 100% !important;
-                padding: 0.4rem 0.75rem 0.5rem;
+                padding: 0.35rem 0.75rem 0.45rem;
+            }
+
+            [data-testid="stVerticalBlock"] {
+                gap: 0.35rem;
             }
 
             .app-header {
-                gap: 0.4rem;
-                margin-bottom: 0.3rem;
-            }
-
-            .app-title {
-                font-size: 1.2rem !important;
-            }
-
-            .title-mark {
-                width: 1.9rem;
-                height: 1.9rem;
-                font-size: 0.95rem;
+                display: none;
             }
 
             [data-testid="stVerticalBlockBorderWrapper"] {
-                margin-top: 0.3rem;
+                margin-top: 0;
+            }
+
+            [data-testid="stVerticalBlockBorderWrapper"] > div {
+                padding: 0.65rem !important;
             }
 
             .tech-title {
-                font-size: 1.1rem;
-            }
-
-            .tech-link {
-                font-size: 0.8rem;
-                padding: 0.2rem 0.45rem;
-                margin-top: 0.2rem;
+                display: none;
             }
 
             .content-layout {
@@ -291,20 +266,20 @@ st.markdown(
                 align-items: flex-start;
             }
 
-            .content-layout.is-expanded .tech-description {
-                display: block !important;
-                flex: 0 0 32%;
-                min-width: 0;
-                margin-bottom: 0;
-                font-size: 0.88rem;
-                line-height: 1.45;
+            [data-testid="stColumn"]:has(.tech-title) {
+                display: none;
+            }
+
+            .tech-description {
+                display: none !important;
             }
 
             .video-wrapper {
-                flex: 1;
+                flex: 1 1 auto;
                 min-width: 0;
-                aspect-ratio: unset;
-                height: calc(100dvh - 130px);
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                height: min(calc(100dvh - 122px), calc((100vw - 1.5rem) * 9 / 16));
             }
         }
 
@@ -331,7 +306,7 @@ st.markdown(
             background: rgba(31, 75, 110, 0.10);
         }
 
-        @media (orientation: landscape) and (max-height: 700px) {
+        @media (orientation: landscape) and (max-height: 920px) {
             #selector-toggle {
                 display: block;
             }
@@ -365,10 +340,6 @@ st.markdown(
             .tech-description {
                 font-size: 0.92rem;
                 line-height: 1.5;
-            }
-
-            .tech-link {
-                font-size: 0.85rem;
             }
         }
     </style>
@@ -509,73 +480,87 @@ def add_landscape_selectors_toggle_js() -> None:
         <script>
         (function() {
             const doc = window.parent.document;
+            const VERSION = 4;
 
-            if (doc._selectorToggleBound) return;
-            doc._selectorToggleBound = true;
+            // Disconnect previous observer if any older version ran
+            if (doc._selectorToggleVersion === VERSION) return;
+            doc._selectorToggleVersion = VERSION;
+            if (doc._selectorObserver) { doc._selectorObserver.disconnect(); }
 
             let visible = false;
+            let applying = false;
 
             function isLandscape() {
-                return window.parent.screen.orientation
-                    ? window.parent.screen.orientation.type.startsWith('landscape')
-                    : window.parent.innerWidth > window.parent.innerHeight;
+                const win = window.parent;
+                return win.innerWidth > win.innerHeight;
             }
 
+            // Find the direct child of the main stVerticalBlock that contains the selects
             function getSelectorRow() {
-                const blocks = doc.querySelectorAll('[data-testid="stHorizontalBlock"]');
-                for (const block of blocks) {
-                    if (block.querySelector('[data-baseweb="select"]')) {
-                        // Walk up past intermediate wrappers to the direct child of stVerticalBlock
-                        let el = block;
-                        while (
-                            el.parentElement &&
-                            el.parentElement.getAttribute('data-testid') !== 'stVerticalBlock'
-                        ) {
-                            el = el.parentElement;
-                        }
-                        return el;
-                    }
+                const select = doc.querySelector('[data-baseweb="select"]');
+                if (!select) return null;
+                // The first stVerticalBlock in document order is the main layout container
+                const mainBlock = doc.querySelector('[data-testid="stVerticalBlock"]');
+                if (!mainBlock) return null;
+                for (const child of mainBlock.children) {
+                    if (child.contains(select)) return child;
                 }
                 return null;
             }
 
             function applyVisibility() {
-                if (!isLandscape()) return;
-                const row = getSelectorRow();
-                if (!row) return;
-                if (visible) {
-                    row.style.removeProperty('display');
-                    row.style.removeProperty('height');
-                    row.style.removeProperty('overflow');
-                    row.style.removeProperty('margin');
-                } else {
-                    row.style.cssText += ';display:none!important;height:0!important;overflow:hidden!important;margin:0!important;';
+                if (applying) return;
+                applying = true;
+                try {
+                    if (!isLandscape()) return;
+                    const row = getSelectorRow();
+                    if (!row) return;
+                    if (visible) {
+                        row.removeAttribute('data-judo-hidden');
+                        row.style.removeProperty('display');
+                    } else {
+                        row.setAttribute('data-judo-hidden', '1');
+                        row.style.setProperty('display', 'none', 'important');
+                    }
+                } finally {
+                    applying = false;
                 }
             }
 
+            // Apply on load with retries to ensure DOM is ready
             applyVisibility();
+            setTimeout(applyVisibility, 300);
+            setTimeout(applyVisibility, 800);
 
-            // Re-apply after every Streamlit rerender
-            const observer = new MutationObserver(() => applyVisibility());
-            observer.observe(doc.body, { childList: true, subtree: true });
+            // Re-apply after every Streamlit rerender (debounced)
+            let debounceTimer = null;
+            const observer = new MutationObserver(function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(applyVisibility, 50);
+            });
+            observer.observe(doc.body, { childList: true, subtree: false });
+            doc._selectorObserver = observer;
 
-            // Create the toggle button
-            const btn = doc.createElement('button');
-            btn.id = 'selector-toggle';
-            btn.title = 'Afficher / masquer les filtres';
-
-            function updateLabel() {
-                btn.textContent = visible ? '✕ Filtres' : '⚙';
+            // Create or re-use the toggle button
+            let btn = doc.getElementById('selector-toggle');
+            if (!btn) {
+                btn = doc.createElement('button');
+                btn.id = 'selector-toggle';
+                btn.title = 'Afficher / masquer les filtres';
+                doc.body.appendChild(btn);
             }
 
-            btn.addEventListener('click', function() {
+            function updateLabel() {
+                btn.textContent = visible ? '✕' : '⚙';
+            }
+
+            btn.onclick = function() {
                 visible = !visible;
                 applyVisibility();
                 updateLabel();
-            });
+            };
 
             updateLabel();
-            doc.body.appendChild(btn);
         })();
         </script>
         """,
@@ -644,8 +629,7 @@ with st.container(border=True):
 
     with title_column:
         st.markdown(
-            f'<h2 class="tech-title">{escape(format_technique_name(selected_technique["name"]))}</h2>'
-            f'<a class="tech-link" href="{escape(selected_technique["youtube"])}" target="_blank" rel="noopener noreferrer">Ouvrir sur YouTube</a>',
+            f'<h2 class="tech-title">{escape(format_technique_name(selected_technique["name"]))}</h2>',
             unsafe_allow_html=True,
         )
 
