@@ -482,27 +482,29 @@ st.markdown(
     """
     <style>
         :root {
-            --ink: #172033;
-            --muted: #5b6475;
-            --line: rgba(23, 32, 51, 0.12);
-            --panel: rgba(255, 255, 255, 0.94);
-            --brand: #e11d48;
-            --brand-dark: #9f1239;
-            --sun: #fbbf24;
-            --mat: #14b8a6;
+            --ink: #f8fafc;
+            --muted: #aeb7c8;
+            --line: rgba(255, 255, 255, 0.14);
+            --panel: rgba(15, 23, 42, 0.70);
+            --hot: #ff3d71;
+            --violet: #8b5cf6;
+            --cyan: #22d3ee;
+            --lime: #a3e635;
+            --deep: #0b1020;
         }
 
         .stApp {
             background:
-                radial-gradient(circle at 14% 4%, rgba(251, 191, 36, 0.32), transparent 14rem),
-                radial-gradient(circle at 90% 0%, rgba(20, 184, 166, 0.24), transparent 16rem),
-                linear-gradient(180deg, #fff7ed 0%, #eefcf8 52%, #f8fafc 100%);
+                radial-gradient(circle at 12% 0%, rgba(255, 61, 113, 0.32), transparent 15rem),
+                radial-gradient(circle at 92% 10%, rgba(34, 211, 238, 0.24), transparent 17rem),
+                radial-gradient(circle at 45% 34%, rgba(139, 92, 246, 0.18), transparent 15rem),
+                linear-gradient(180deg, #0b1020 0%, #101827 48%, #111827 100%);
             color: var(--ink);
         }
 
         .block-container {
             max-width: 760px;
-            padding: 1rem 0.85rem 2.5rem;
+            padding: 0.75rem 0.85rem 2.25rem;
         }
 
         [data-testid="stHeader"],
@@ -510,58 +512,65 @@ st.markdown(
             display: none;
         }
 
-        .app-title {
-            margin: 0 0 0.85rem;
-            color: var(--brand-dark);
-            font-size: 1.75rem;
-            font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: 0;
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin: 0 0 0.65rem;
         }
 
-        .app-title::after {
-            content: "";
-            display: block;
-            width: 3.25rem;
-            height: 0.28rem;
-            border-radius: 999px;
-            margin-top: 0.45rem;
-            background: linear-gradient(90deg, var(--brand), var(--sun), var(--mat));
-        }
-
-        .tech-card {
-            border: 1px solid var(--line);
+        .title-mark {
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            width: 2.35rem;
+            height: 2.35rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 8px;
-            background: var(--panel);
-            box-shadow: 0 16px 44px rgba(16, 24, 40, 0.09);
-            overflow: hidden;
-            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.10);
+            box-shadow: 0 12px 28px rgba(34, 211, 238, 0.14);
+            font-size: 1.15rem;
+            backdrop-filter: blur(16px);
+        }
+
+        .app-title {
+            margin: 0 !important;
+            background: linear-gradient(90deg, #ffffff, var(--cyan), var(--lime));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+            font-size: 1.55rem !important;
+            font-weight: 900 !important;
+            line-height: 1.05 !important;
+            letter-spacing: 0 !important;
         }
 
         [data-testid="stVerticalBlockBorderWrapper"] {
-            border-color: rgba(225, 29, 72, 0.14);
+            border: 1px solid var(--line);
             border-radius: 8px;
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 247, 237, 0.78)),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.05)),
                 var(--panel);
-            box-shadow: 0 18px 46px rgba(23, 32, 51, 0.12);
-            margin-top: 1rem;
+            box-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+            margin-top: 0.75rem;
+            backdrop-filter: blur(16px);
         }
 
         .tech-title {
             margin: 0;
-            color: var(--brand-dark);
-            font-size: 1.65rem;
+            color: var(--ink);
+            font-size: 1.45rem;
             line-height: 1.08;
             font-weight: 900;
             letter-spacing: 0;
+            overflow-wrap: anywhere;
         }
 
         .tech-description {
-            margin: 0 0 1rem;
-            color: #344054;
-            font-size: 1rem;
-            line-height: 1.65;
+            margin: 0 0 0.85rem;
+            color: var(--muted);
+            font-size: 0.96rem;
+            line-height: 1.55;
         }
 
         .video-wrapper {
@@ -570,6 +579,8 @@ st.markdown(
             aspect-ratio: 16 / 9;
             overflow: hidden;
             background: #000000;
+            border-radius: 8px;
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
         }
 
         .video-frame {
@@ -581,11 +592,33 @@ st.markdown(
         }
 
         .stSelectbox div[data-baseweb="select"] > div {
-            min-height: 2.75rem;
+            min-height: 2.45rem;
             border-radius: 8px;
-            border-color: rgba(20, 184, 166, 0.26);
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 8px 22px rgba(20, 184, 166, 0.08);
+            border-color: rgba(255, 255, 255, 0.16);
+            background: rgba(15, 23, 42, 0.72);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+            backdrop-filter: blur(14px);
+        }
+
+        .stSelectbox div[data-baseweb="select"] span,
+        .stSelectbox div[data-baseweb="select"] input,
+        .stSelectbox div[data-baseweb="select"] div,
+        .stSelectbox div[data-baseweb="select"] svg {
+            color: var(--ink) !important;
+            fill: var(--ink) !important;
+        }
+
+        .stSelectbox div[data-baseweb="select"] input::placeholder {
+            color: rgba(248, 250, 252, 0.74) !important;
+        }
+
+        .stSelectbox [data-baseweb="select"] [aria-selected="true"],
+        .stSelectbox [data-baseweb="select"] [data-baseweb="tag"] {
+            color: var(--ink) !important;
+        }
+
+        .stSelectbox div[data-baseweb="select"] {
+            min-height: 2.45rem;
         }
 
         .stSelectbox input {
@@ -608,26 +641,37 @@ st.markdown(
         }
 
         .stButton button {
-            min-height: 2.75rem;
+            min-height: 2.35rem;
             width: 100%;
             border-radius: 8px;
-            border-color: rgba(225, 29, 72, 0.18);
-            background: linear-gradient(135deg, #fff1f2 0%, #ffffff 100%);
-            color: var(--brand-dark);
+            border-color: rgba(34, 211, 238, 0.34);
+            background: rgba(15, 23, 42, 0.74);
+            color: #ffffff;
             padding: 0;
             font-size: 1.3rem;
             font-weight: 800;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
         }
 
         .stButton button:hover {
-            border-color: rgba(225, 29, 72, 0.42);
-            background: #ffe4e6;
-            color: var(--brand);
+            border-color: rgba(34, 211, 238, 0.72);
+            background: rgba(34, 211, 238, 0.14);
+            color: #ffffff;
         }
 
         @media (min-width: 760px) {
+            .app-title {
+                font-size: 1.8rem !important;
+            }
+
+            .title-mark {
+                width: 2.65rem;
+                height: 2.65rem;
+                font-size: 1.35rem;
+            }
+
             .tech-title {
-                font-size: 2rem;
+                font-size: 1.85rem;
             }
         }
     </style>
@@ -635,7 +679,17 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<h1 class="app-title">🥋 Prises de Judo</h1>', unsafe_allow_html=True)
+st.markdown(
+    """
+    <div class="app-header">
+        <div class="title-mark">🥋</div>
+        <div>
+            <h1 class="app-title">Prises de Judo</h1>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 categories = sorted({technique["category"] for technique in JUDO_TECHNIQUES})
 
