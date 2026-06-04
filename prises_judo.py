@@ -309,11 +309,15 @@ def add_landscape_swipe_navigation_js() -> None:
             }
 
             function prevBtn() {
-                return doc.querySelector('button[title="Technique précédente"]');
+                return Array.from(doc.querySelectorAll('button')).find(
+                    (btn) => btn.textContent && btn.textContent.trim() === '←'
+                );
             }
 
             function nextBtn() {
-                return doc.querySelector('button[title="Technique suivante"]');
+                return Array.from(doc.querySelectorAll('button')).find(
+                    (btn) => btn.textContent && btn.textContent.trim() === '→'
+                );
             }
 
             function ensureSwipeLayer() {
