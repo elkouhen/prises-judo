@@ -150,6 +150,17 @@ st.markdown(
             display: none;
         }
 
+        /* Portrait : description masquée par défaut, le bouton ⛶ permet de l'afficher */
+        @media (orientation: portrait) {
+            .tech-description {
+                display: none;
+            }
+
+            .content-layout.is-expanded .tech-description {
+                display: block !important;
+            }
+        }
+
         .stSelectbox div[data-baseweb="select"] > div {
             min-height: 2.45rem;
             border-radius: 8px;
@@ -462,26 +473,38 @@ def add_swipe_navigation_js() -> None:
                 return doc.querySelector('button[title="Technique suivante"]');
             }
 
-            if (doc._swipeNavBound) return;
-            doc._swipeNavBound = true;
+            // Swipe navigation
+            if (!doc._swipeNavBound) {
+                doc._swipeNavBound = true;
 
-            let startX = 0, startY = 0;
+                let startX = 0, startY = 0;
 
-            doc.addEventListener('touchstart', function(e) {
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            }, { passive: true });
+                doc.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }, { passive: true });
 
-            doc.addEventListener('touchend', function(e) {
-                const dx = e.changedTouches[0].clientX - startX;
-                const dy = e.changedTouches[0].clientY - startY;
+                doc.addEventListener('touchend', function(e) {
+                    const dx = e.changedTouches[0].clientX - startX;
+                    const dy = e.changedTouches[0].clientY - startY;
 
-                // Ignore short swipes or mostly vertical gestures
-                if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
+                    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
 
-                if (dx < 0) { const b = nextBtn(); if (b) b.click(); }
-                else        { const b = prevBtn(); if (b) b.click(); }
-            }, { passive: true });
+                    if (dx < 0) { const b = nextBtn(); if (b) b.click(); }
+                    else        { const b = prevBtn(); if (b) b.click(); }
+                }, { passive: true });
+            }
+
+            // Keyboard navigation
+            if (!doc._keyNavBound) {
+                doc._keyNavBound = true;
+
+                doc.addEventListener('keydown', function(e) {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                    if (e.key === 'ArrowLeft')  { const b = prevBtn(); if (b) { b.click(); e.preventDefault(); } }
+                    if (e.key === 'ArrowRight') { const b = nextBtn(); if (b) { b.click(); e.preventDefault(); } }
+                }, true);
+            }
         })();
         </script>
         """,
@@ -611,7 +634,7 @@ with st.container(border=True):
             "⊟" if is_expanded else "⛶",
             use_container_width=True,
             on_click=toggle_video_expanded,
-            help="Réduire la vidéo" if is_expanded else "Agrandir la vidéo",
+            help="Masquer la description" if is_expanded else "Voir la description / Agrandir la vidéo",
         )
 
     content_class = "content-layout is-expanded" if st.session_state.get("video_expanded", False) else "content-layout"
