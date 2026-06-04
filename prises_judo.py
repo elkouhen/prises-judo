@@ -81,15 +81,6 @@ st.markdown(
             border: 0;
         }
 
-        .judo-swipe-zone {
-            display: none;
-            position: absolute;
-            inset: 0;
-            z-index: 5;
-            background: transparent;
-            touch-action: none;
-        }
-
         .judo-landscape-nav {
             display: none;
         }
@@ -384,63 +375,15 @@ def add_landscape_swipe_navigation_js() -> None:
                 });
             }
 
-            function ensureSwipeLayer() {
-                const wrapper = doc.querySelector('.video-wrapper');
-                if (!wrapper) return;
-
-                let zone = wrapper.querySelector('.judo-swipe-zone');
-                if (!zone) {
-                    zone = doc.createElement('div');
-                    zone.className = 'judo-swipe-zone';
-                    wrapper.appendChild(zone);
-                }
-
-                zone.style.display = isLandscape() ? 'block' : 'none';
-                if (zone._judoSwipeZoneBound) return zone;
-                zone._judoSwipeZoneBound = true;
-
-                let startX = 0;
-                let startY = 0;
-
-                zone.addEventListener('touchstart', function(e) {
-                    if (!isLandscape() || !e.touches.length) return;
-                    startX = e.touches[0].clientX;
-                    startY = e.touches[0].clientY;
-                }, { passive: true });
-
-                zone.addEventListener('touchend', function(e) {
-                    if (!isLandscape() || !e.changedTouches.length) return;
-
-                    const dx = e.changedTouches[0].clientX - startX;
-                    const dy = e.changedTouches[0].clientY - startY;
-
-                    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
-
-                    if (dx < 0) {
-                        const btn = getNextBtn();
-                        if (btn) btn.click();
-                    } else {
-                        const btn = getPrevBtn();
-                        if (btn) btn.click();
-                    }
-                }, { passive: true });
-
-                return zone;
-            }
-
-            if (doc._judoSwipeBound) return;
-            doc._judoSwipeBound = true;
+            if (doc._judoNavObserverBound) return;
+            doc._judoNavObserverBound = true;
 
             ensureNavBindings();
-            ensureSwipeLayer();
             window.parent.setTimeout(ensureNavBindings, 250);
             window.parent.setTimeout(ensureNavBindings, 750);
-            window.parent.setTimeout(ensureSwipeLayer, 250);
-            window.parent.setTimeout(ensureSwipeLayer, 750);
 
             const observer = new MutationObserver(function() {
                 ensureNavBindings();
-                ensureSwipeLayer();
             });
             observer.observe(doc.body, { childList: true, subtree: true });
         })();
@@ -523,7 +466,7 @@ st.markdown(
     <div class="tech-panel">
         <p class="tech-description">{escape(selected_technique["description"])}</p>
         <div class="video-wrapper">
-            <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="video-{video_id}" key="{video_id}" class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="judo-landscape-nav" aria-hidden="true">
             <button type="button" class="judo-nav-button" data-direction="prev" aria-label="Technique précédente">←</button>
