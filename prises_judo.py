@@ -358,25 +358,28 @@ def add_landscape_swipe_navigation_js() -> None:
                 return win.innerWidth > win.innerHeight;
             }
 
-            function prevBtn() {
-                return Array.from(doc.querySelectorAll('button')).find(
-                    (btn) => btn.textContent && btn.textContent.trim() === '←'
-                );
+            function getPrevBtn() {
+                const btns = Array.from(doc.querySelectorAll('button[kind="secondary"]'));
+                return btns.find(btn => btn.querySelector('div[data-testid="stMarkdownContainer"] p')?.textContent.trim() === '←');
             }
 
-            function nextBtn() {
-                return Array.from(doc.querySelectorAll('button')).find(
-                    (btn) => btn.textContent && btn.textContent.trim() === '→'
-                );
+            function getNextBtn() {
+                const btns = Array.from(doc.querySelectorAll('button[kind="secondary"]'));
+                return btns.find(btn => btn.querySelector('div[data-testid="stMarkdownContainer"] p')?.textContent.trim() === '→');
             }
 
             function ensureNavBindings() {
                 Array.from(doc.querySelectorAll('.judo-nav-button')).forEach((btn) => {
                     if (btn._judoNavBound) return;
                     btn._judoNavBound = true;
-                    btn.addEventListener('click', function() {
-                        const target = btn.dataset.direction === 'next' ? nextBtn() : prevBtn();
-                        if (target) target.click();
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = btn.dataset.direction === 'next' ? getNextBtn() : getPrevBtn();
+                        if (target) {
+                           target.click();
+                        } else {
+                           console.log("Streamlit button not found");
+                        }
                     });
                 });
             }
@@ -414,10 +417,10 @@ def add_landscape_swipe_navigation_js() -> None:
                     if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
 
                     if (dx < 0) {
-                        const btn = nextBtn();
+                        const btn = getNextBtn();
                         if (btn) btn.click();
                     } else {
-                        const btn = prevBtn();
+                        const btn = getPrevBtn();
                         if (btn) btn.click();
                     }
                 }, { passive: true });
