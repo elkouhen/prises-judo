@@ -82,9 +82,11 @@ st.markdown(
 
         .judo-swipe-zone {
             display: none;
-            height: 1.2rem;
+            position: absolute;
+            inset: 0;
+            z-index: 5;
             background: transparent;
-            touch-action: pan-y;
+            touch-action: none;
         }
 
         .app-title {
@@ -226,9 +228,6 @@ st.markdown(
                 min-height: 260px;
             }
 
-            .judo-swipe-zone {
-                display: block;
-            }
         }
 
         @media (max-width: 480px) and (orientation: portrait) {
@@ -327,11 +326,11 @@ def add_landscape_swipe_navigation_js() -> None:
                 const wrapper = doc.querySelector('.video-wrapper');
                 if (!wrapper) return;
 
-                let zone = wrapper.parentElement && wrapper.parentElement.querySelector('.judo-swipe-zone');
-                if (!zone || zone.parentElement !== wrapper.parentElement) {
+                let zone = wrapper.querySelector('.judo-swipe-zone');
+                if (!zone) {
                     zone = doc.createElement('div');
                     zone.className = 'judo-swipe-zone';
-                    wrapper.parentElement.insertBefore(zone, wrapper);
+                    wrapper.appendChild(zone);
                 }
 
                 zone.style.display = isLandscape() ? 'block' : 'none';
