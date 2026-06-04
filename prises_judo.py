@@ -80,6 +80,14 @@ st.markdown(
             border: 0;
         }
 
+        .judo-swipe-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: transparent;
+            touch-action: pan-y;
+        }
+
         .app-title {
             display: none;
             align-items: center;
@@ -308,34 +316,59 @@ def add_landscape_swipe_navigation_js() -> None:
                 return doc.querySelector('button[title="Technique suivante"]');
             }
 
+            function ensureSwipeLayer() {
+                const wrapper = doc.querySelector('.video-wrapper');
+                if (!wrapper) return;
+
+                let layer = wrapper.querySelector('.judo-swipe-layer');
+                if (!layer) {
+                    layer = doc.createElement('div');
+                    layer.className = 'judo-swipe-layer';
+                    wrapper.appendChild(layer);
+                }
+
+                layer.style.display = isLandscape() ? 'block' : 'none';
+                if (layer._judoSwipeLayerBound) return layer;
+                layer._judoSwipeLayerBound = true;
+
+                let startX = 0;
+                let startY = 0;
+
+                layer.addEventListener('touchstart', function(e) {
+                    if (!isLandscape() || !e.touches.length) return;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }, { passive: true });
+
+                layer.addEventListener('touchend', function(e) {
+                    if (!isLandscape() || !e.changedTouches.length) return;
+
+                    const dx = e.changedTouches[0].clientX - startX;
+                    const dy = e.changedTouches[0].clientY - startY;
+
+                    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
+
+                    if (dx < 0) {
+                        const btn = nextBtn();
+                        if (btn) btn.click();
+                    } else {
+                        const btn = prevBtn();
+                        if (btn) btn.click();
+                    }
+                }, { passive: true });
+
+                return layer;
+            }
+
             if (doc._judoSwipeBound) return;
             doc._judoSwipeBound = true;
 
-            let startX = 0;
-            let startY = 0;
+            ensureSwipeLayer();
+            window.parent.setTimeout(ensureSwipeLayer, 250);
+            window.parent.setTimeout(ensureSwipeLayer, 750);
 
-            doc.addEventListener('touchstart', function(e) {
-                if (!isLandscape() || !e.touches.length) return;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            }, { passive: true });
-
-            doc.addEventListener('touchend', function(e) {
-                if (!isLandscape() || !e.changedTouches.length) return;
-
-                const dx = e.changedTouches[0].clientX - startX;
-                const dy = e.changedTouches[0].clientY - startY;
-
-                if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx) * 0.75) return;
-
-                if (dx < 0) {
-                    const btn = nextBtn();
-                    if (btn) btn.click();
-                } else {
-                    const btn = prevBtn();
-                    if (btn) btn.click();
-                }
-            }, { passive: true });
+            const observer = new MutationObserver(ensureSwipeLayer);
+            observer.observe(doc.body, { childList: true, subtree: true });
         })();
         </script>
         """,
