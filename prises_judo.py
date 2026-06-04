@@ -54,12 +54,13 @@ st.markdown(
             display: none;
         }
 
-        [data-testid="stVerticalBlockBorderWrapper"] {
+        .tech-panel {
             border: 1px solid var(--line);
             border-radius: 8px;
             background: var(--panel);
             box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
             margin-top: 0.75rem;
+            padding: 1rem;
         }
 
         .video-wrapper {
@@ -87,6 +88,23 @@ st.markdown(
             z-index: 5;
             background: transparent;
             touch-action: none;
+        }
+
+        .judo-landscape-nav {
+            display: none;
+        }
+
+        .judo-nav-button {
+            width: 3rem;
+            height: 3rem;
+            padding: 0;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: var(--panel);
+            color: var(--ink);
+            font-size: 1.4rem;
+            line-height: 1;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
         }
 
         .app-title {
@@ -188,46 +206,76 @@ st.markdown(
             display: none !important;
         }
 
-        [data-testid="stHorizontalBlock"] {
-            align-items: stretch;
-            column-gap: 0.35rem;
-            display: flex;
-            flex-wrap: nowrap !important;
+        .stVerticalBlock {
+            padding: 0 !important;
         }
-
-        [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
-            min-width: 0 !important;
+        
+        .judo-nav-button:active {
+            background: var(--accent-soft);
+            border-color: var(--accent);
         }
 
         [data-testid="stElementContainer"]:has(iframe[height="0"]) {
             display: none;
         }
 
-        @media (orientation: landscape) and (max-height: 920px) {
+        @media (orientation: landscape) {
             .block-container {
                 max-width: 100% !important;
-                padding: 0.35rem 0.75rem 0.45rem;
+                padding: 0 !important;
             }
 
-            [data-testid="stVerticalBlock"] {
-                gap: 0.35rem;
-            }
-
+            [data-testid="stElementContainer"]:has(.app-title),
             [data-testid="stHorizontalBlock"]:has(.stSelectbox) {
+                display: none !important;
+            }
+
+            .tech-panel {
+                margin: 0;
+                padding: 0;
+                border: none;
+                border-radius: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            .tech-panel .tech-description {
                 display: none;
             }
 
-            [data-testid="stVerticalBlockBorderWrapper"] {
-                margin-top: 0;
-            }
-
             .video-wrapper {
-                aspect-ratio: auto;
-                height: calc(100vh - 105px);
-                max-height: calc(100vh - 105px);
-                min-height: 260px;
+                aspect-ratio: auto !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                height: 100dvh !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
             }
 
+            .judo-landscape-nav {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1.5rem;
+                position: fixed;
+                right: 1.5rem;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 9999;
+            }
+            
+            .judo-nav-button {
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(4px);
+                border: none;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                width: 3.5rem;
+                height: 3.5rem;
+                font-size: 1.6rem;
+            }
         }
 
         @media (max-width: 480px) and (orientation: portrait) {
@@ -322,6 +370,17 @@ def add_landscape_swipe_navigation_js() -> None:
                 );
             }
 
+            function ensureNavBindings() {
+                Array.from(doc.querySelectorAll('.judo-nav-button')).forEach((btn) => {
+                    if (btn._judoNavBound) return;
+                    btn._judoNavBound = true;
+                    btn.addEventListener('click', function() {
+                        const target = btn.dataset.direction === 'next' ? nextBtn() : prevBtn();
+                        if (target) target.click();
+                    });
+                });
+            }
+
             function ensureSwipeLayer() {
                 const wrapper = doc.querySelector('.video-wrapper');
                 if (!wrapper) return;
@@ -369,11 +428,17 @@ def add_landscape_swipe_navigation_js() -> None:
             if (doc._judoSwipeBound) return;
             doc._judoSwipeBound = true;
 
+            ensureNavBindings();
             ensureSwipeLayer();
+            window.parent.setTimeout(ensureNavBindings, 250);
+            window.parent.setTimeout(ensureNavBindings, 750);
             window.parent.setTimeout(ensureSwipeLayer, 250);
             window.parent.setTimeout(ensureSwipeLayer, 750);
 
-            const observer = new MutationObserver(ensureSwipeLayer);
+            const observer = new MutationObserver(function() {
+                ensureNavBindings();
+                ensureSwipeLayer();
+            });
             observer.observe(doc.body, { childList: true, subtree: true });
         })();
         </script>
@@ -447,33 +512,36 @@ with technique_column:
 selected_technique = category_techniques[technique_names.index(selected_name)]
 add_landscape_swipe_navigation_js()
 
+video_id = extract_youtube_id(selected_technique["youtube"])
+embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
+
+st.markdown(
+    f"""
+    <div class="tech-panel">
+        <p class="tech-description">{escape(selected_technique["description"])}</p>
+        <div class="video-wrapper">
+            <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="judo-landscape-nav" aria-hidden="true">
+            <button type="button" class="judo-nav-button" data-direction="prev" aria-label="Technique précédente">←</button>
+            <button type="button" class="judo-nav-button" data-direction="next" aria-label="Technique suivante">→</button>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.button(
     "←",
     on_click=select_technique,
     args=(technique_names[previous_index],),
     help="Technique précédente",
+    key="hidden_previous_button",
 )
-
 st.button(
     "→",
     on_click=select_technique,
     args=(technique_names[next_index],),
     help="Technique suivante",
+    key="hidden_next_button",
 )
-
-video_id = extract_youtube_id(selected_technique["youtube"])
-embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
-
-with st.container(border=True):
-    st.markdown(
-        f'<p class="tech-description">{escape(selected_technique["description"])}</p>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        f"""
-        <div class="video-wrapper">
-            <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
