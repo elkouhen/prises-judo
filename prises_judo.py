@@ -306,28 +306,6 @@ st.markdown(
                 aspect-ratio: unset;
                 height: calc(100dvh - 130px);
             }
-
-            /* Collapse total des sélecteurs + leurs wrappers */
-            [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]) {
-                transition: max-height 0.25s ease, opacity 0.2s ease;
-                max-height: 200px;
-                opacity: 1;
-                overflow: hidden;
-            }
-
-            body:not(.selectors-visible) [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]),
-            body:not(.selectors-visible) [data-testid="stHorizontalBlock"]:has([data-baseweb="select"]) * {
-                max-height: 0 !important;
-                min-height: 0 !important;
-                height: 0 !important;
-                opacity: 0 !important;
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
-                margin-top: 0 !important;
-                margin-bottom: 0 !important;
-                overflow: hidden !important;
-                border: none !important;
-            }
         }
 
         #selector-toggle {
@@ -535,16 +513,64 @@ def add_landscape_selectors_toggle_js() -> None:
             if (doc._selectorToggleBound) return;
             doc._selectorToggleBound = true;
 
+            let visible = false;
+
+            function isLandscape() {
+                return window.parent.screen.orientation
+                    ? window.parent.screen.orientation.type.startsWith('landscape')
+                    : window.parent.innerWidth > window.parent.innerHeight;
+            }
+
+            function getSelectorRow() {
+                const blocks = doc.querySelectorAll('[data-testid="stHorizontalBlock"]');
+                for (const block of blocks) {
+                    if (block.querySelector('[data-baseweb="select"]')) {
+                        // Walk up past intermediate wrappers to the direct child of stVerticalBlock
+                        let el = block;
+                        while (
+                            el.parentElement &&
+                            el.parentElement.getAttribute('data-testid') !== 'stVerticalBlock'
+                        ) {
+                            el = el.parentElement;
+                        }
+                        return el;
+                    }
+                }
+                return null;
+            }
+
+            function applyVisibility() {
+                if (!isLandscape()) return;
+                const row = getSelectorRow();
+                if (!row) return;
+                if (visible) {
+                    row.style.removeProperty('display');
+                    row.style.removeProperty('height');
+                    row.style.removeProperty('overflow');
+                    row.style.removeProperty('margin');
+                } else {
+                    row.style.cssText += ';display:none!important;height:0!important;overflow:hidden!important;margin:0!important;';
+                }
+            }
+
+            applyVisibility();
+
+            // Re-apply after every Streamlit rerender
+            const observer = new MutationObserver(() => applyVisibility());
+            observer.observe(doc.body, { childList: true, subtree: true });
+
+            // Create the toggle button
             const btn = doc.createElement('button');
             btn.id = 'selector-toggle';
             btn.title = 'Afficher / masquer les filtres';
 
             function updateLabel() {
-                btn.textContent = doc.body.classList.contains('selectors-visible') ? '✕' : '⚙';
+                btn.textContent = visible ? '✕ Filtres' : '⚙';
             }
 
             btn.addEventListener('click', function() {
-                doc.body.classList.toggle('selectors-visible');
+                visible = !visible;
+                applyVisibility();
                 updateLabel();
             });
 
