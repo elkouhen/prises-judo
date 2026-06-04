@@ -505,6 +505,15 @@ st.markdown(
             display: none;
         }
 
+        .app-title {
+            margin: 0 0 0.85rem;
+            color: var(--ink);
+            font-size: 1.45rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: 0;
+        }
+
         .tech-card {
             border: 1px solid var(--line);
             border-radius: 8px;
@@ -514,12 +523,16 @@ st.markdown(
             margin-top: 1rem;
         }
 
-        .tech-body {
-            padding: 1rem;
+        [data-testid="stVerticalBlockBorderWrapper"] {
+            border-color: var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 16px 44px rgba(16, 24, 40, 0.09);
+            margin-top: 1rem;
         }
 
         .tech-title {
-            margin: 0 0 0.65rem;
+            margin: 0;
             color: var(--ink);
             font-size: 1.65rem;
             line-height: 1.08;
@@ -561,6 +574,17 @@ st.markdown(
             margin-bottom: 0;
         }
 
+        [data-testid="stHorizontalBlock"] {
+            align-items: stretch;
+            column-gap: 0.35rem;
+            display: flex;
+            flex-wrap: nowrap !important;
+        }
+
+        [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+            min-width: 0 !important;
+        }
+
         .stButton button {
             min-height: 2.75rem;
             width: 100%;
@@ -588,6 +612,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown('<h1 class="app-title">Prises de Judo</h1>', unsafe_allow_html=True)
+
 categories = sorted({technique["category"] for technique in JUDO_TECHNIQUES})
 
 
@@ -607,6 +633,10 @@ def reset_selected_name() -> None:
     st.session_state.selected_name = category_techniques[0]["name"]
 
 
+def select_technique(name: str) -> None:
+    st.session_state.selected_name = name
+
+
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -619,29 +649,28 @@ if (
 ):
     st.session_state.selected_name = technique_names[0]
 
-selected_category = st.selectbox(
-    "Catégorie",
-    categories,
-    index=categories.index(st.session_state.selected_category),
-    label_visibility="collapsed",
-    key="selected_category",
-    on_change=reset_selected_name,
+category_column, technique_column = st.columns(
+    [0.40, 0.60],
+    gap="small",
 )
+
+with category_column:
+    selected_category = st.selectbox(
+        "Catégorie",
+        categories,
+        index=categories.index(st.session_state.selected_category),
+        label_visibility="collapsed",
+        key="selected_category",
+        on_change=reset_selected_name,
+    )
+
 category_techniques = get_category_techniques(selected_category)
 technique_names = [technique["name"] for technique in category_techniques]
-
 current_index = technique_names.index(st.session_state.selected_name)
 previous_index = (current_index - 1) % len(technique_names)
 next_index = (current_index + 1) % len(technique_names)
 
-previous_column, select_column, next_column = st.columns([0.15, 0.70, 0.15], gap="small")
-
-with previous_column:
-    if st.button("‹", use_container_width=True):
-        st.session_state.selected_name = technique_names[previous_index]
-        st.rerun()
-
-with select_column:
+with technique_column:
     selected_name = st.selectbox(
         "Prise",
         technique_names,
@@ -650,27 +679,47 @@ with select_column:
         key="selected_name",
     )
 
-with next_column:
-    if st.button("›", use_container_width=True):
-        st.session_state.selected_name = technique_names[next_index]
-        st.rerun()
-
 current_index = technique_names.index(selected_name)
+previous_index = (current_index - 1) % len(technique_names)
+next_index = (current_index + 1) % len(technique_names)
 selected_technique = category_techniques[current_index]
 video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
 
-st.markdown(
-    f"""
-    <article class="tech-card">
-        <div class="tech-body">
-            <h2 class="tech-title">{escape(selected_technique['name'])}</h2>
-            <p class="tech-description">{escape(selected_technique['description'])}</p>
-            <div class="video-wrapper">
-                <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
+with st.container(border=True):
+    title_column, previous_column, next_column = st.columns([0.76, 0.12, 0.12], gap="small")
+
+    with title_column:
+        st.markdown(
+            f'<h2 class="tech-title">{escape(selected_technique["name"])}</h2>',
+            unsafe_allow_html=True,
+        )
+
+    with previous_column:
+        st.button(
+            "‹",
+            use_container_width=True,
+            on_click=select_technique,
+            args=(technique_names[previous_index],),
+        )
+
+    with next_column:
+        st.button(
+            "›",
+            use_container_width=True,
+            on_click=select_technique,
+            args=(technique_names[next_index],),
+        )
+
+    st.markdown(
+        f'<p class="tech-description">{escape(selected_technique["description"])}</p>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f"""
+        <div class="video-wrapper">
+            <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-    </article>
-    """,
-    unsafe_allow_html=True,
-)
+        """,
+        unsafe_allow_html=True,
+    )
