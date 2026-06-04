@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Prises de judo",
@@ -243,6 +244,37 @@ def reset_selected_name() -> None:
     category_techniques = get_category_techniques(st.session_state.selected_category)
     st.session_state.selected_name = category_techniques[0]["name"]
 
+
+def prevent_mobile_keyboard_on_selectboxes() -> None:
+    components.html(
+        """
+        <script>
+            function lockSelectInputs() {
+                const inputs = window.parent.document.querySelectorAll(
+                    '[data-baseweb="select"] input'
+                );
+
+                inputs.forEach((input) => {
+                    input.setAttribute('readonly', 'readonly');
+                    input.setAttribute('inputmode', 'none');
+                    input.setAttribute('autocomplete', 'off');
+                });
+            }
+
+            lockSelectInputs();
+            window.parent.setTimeout(lockSelectInputs, 250);
+            window.parent.setTimeout(lockSelectInputs, 750);
+
+            const observer = new MutationObserver(lockSelectInputs);
+            observer.observe(window.parent.document.body, {
+                childList: true,
+                subtree: true
+            });
+        </script>
+        """,
+        height=0,
+    )
+
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -254,6 +286,8 @@ if (
     or st.session_state.selected_name not in technique_names
 ):
     st.session_state.selected_name = technique_names[0]
+
+prevent_mobile_keyboard_on_selectboxes()
 
 st.markdown(
     """
