@@ -146,6 +146,10 @@ st.markdown(
             border: 0;
         }
 
+        .content-layout.is-expanded .tech-description {
+            display: none;
+        }
+
         .stSelectbox div[data-baseweb="select"] > div {
             min-height: 2.45rem;
             border-radius: 8px;
@@ -365,6 +369,10 @@ def select_technique(name: str) -> None:
     st.session_state.selected_name = name
 
 
+def toggle_video_expanded() -> None:
+    st.session_state.video_expanded = not st.session_state.get("video_expanded", False)
+
+
 def prevent_mobile_keyboard_on_selectboxes() -> None:
     components.html(
         """
@@ -491,7 +499,9 @@ video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
 
 with st.container(border=True):
-    title_column, previous_column, next_column = st.columns([0.68, 0.16, 0.16], gap="small")
+    title_column, previous_column, next_column, expand_column = st.columns(
+        [0.55, 0.15, 0.15, 0.15], gap="small"
+    )
 
     with title_column:
         st.markdown(
@@ -518,9 +528,19 @@ with st.container(border=True):
             help="Technique suivante",
         )
 
+    with expand_column:
+        is_expanded = st.session_state.get("video_expanded", False)
+        st.button(
+            "⊟" if is_expanded else "⛶",
+            use_container_width=True,
+            on_click=toggle_video_expanded,
+            help="Réduire la vidéo" if is_expanded else "Agrandir la vidéo",
+        )
+
+    content_class = "content-layout is-expanded" if st.session_state.get("video_expanded", False) else "content-layout"
     st.markdown(
         f"""
-        <div class="content-layout">
+        <div class="{content_class}">
             <p class="tech-description">{escape(selected_technique["description"])}</p>
             <div class="video-wrapper">
                 <iframe class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
