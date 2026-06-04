@@ -168,9 +168,9 @@ st.markdown(
 
             .video-wrapper {
                 aspect-ratio: auto;
-                height: calc(100dvh - 170px);
-                max-height: calc(100dvh - 170px);
-                min-height: 260px;
+                height: calc(100vh - 155px);
+                max-height: calc(100vh - 155px);
+                min-height: 240px;
             }
         }
 
