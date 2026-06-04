@@ -490,20 +490,60 @@ st.markdown(
             box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
             margin-bottom: 1.2rem;
         }
+        .tech-card-large {
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 24px;
+            padding: 2rem;
+            background: #ffffff;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+            margin-bottom: 1.8rem;
+            max-width: 980px;
+        }
         .tech-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.85rem;
+            font-weight: 800;
             color: #0f172a;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.45rem;
         }
         .tech-meta {
             color: #64748b;
-            margin-bottom: 1rem;
+            margin-bottom: 1.15rem;
+            font-size: 0.95rem;
         }
         .tech-description {
-            font-size: 1rem;
-            line-height: 1.75;
+            font-size: 1.05rem;
+            line-height: 1.8;
             color: #334155;
+            margin-bottom: 1.6rem;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #000000;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
+        .video-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .video-link {
+            margin-top: 1rem;
+            color: #334155;
+            font-size: 0.95rem;
+        }
+        .video-link a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .video-link a:hover {
+            text-decoration: underline;
         }
         .control-card {
             border: 1px solid rgba(15, 23, 42, 0.08);
@@ -572,22 +612,17 @@ with st.container():
     st.markdown(
         """
         <div class="control-card">
-            <div class="control-note">Choisissez une catégorie et filtrez le nom de la prise pour trouver rapidement la technique souhaitée.</div>
+            <div class="control-note">Choisissez une catégorie pour découvrir les techniques de judo associées.</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
-    control_col1, control_col2 = st.columns([2, 1], gap="medium")
-    with control_col1:
-        search = st.text_input("Recherche de prise", "", placeholder="Ex: Uchi-mata")
-    with control_col2:
-        selected_category = st.selectbox("Catégorie", categories)
+    selected_category = st.selectbox("Catégorie", categories)
 
 filtered_techniques = [
     technique
     for technique in JUDO_TECHNIQUES
     if technique["category"] == selected_category
-    and search.lower() in technique["name"].lower()
 ]
 
 if not filtered_techniques:
@@ -606,31 +641,30 @@ selected_technique = next(
 technique_count = len(filtered_techniques)
 category_count = len(categories)
 
+
+def extract_youtube_id(url: str) -> str:
+    if "youtu.be/" in url:
+        return url.split("youtu.be/")[1].split("?")[0].split("&")[0]
+    if "/shorts/" in url:
+        return url.split("/shorts/")[1].split("?")[0].split("&")[0]
+    if "watch?v=" in url:
+        return url.split("watch?v=")[1].split("&")[0]
+    return url
+
+video_id = extract_youtube_id(selected_technique["youtube"])
+embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
+
 st.markdown(
     f"""
-    <div class="tech-card">
-        <div class="tech-title">{selected_technique['category']} — {selected_technique['name']}</div>
-        <div class="tech-meta">{technique_count} prise(s) dans cette catégorie • {len(JUDO_TECHNIQUES)} techniques au total</div>
+    <div class="tech-card-large">
+        <div class="tech-title">{selected_technique['name']}</div>
+        <div class="tech-meta">{selected_technique['category']} • {technique_count} prise(s) dans cette catégorie • {len(JUDO_TECHNIQUES)} techniques au total</div>
         <div class="tech-description">{selected_technique['description']}</div>
+        <div class="video-wrapper">
+            <iframe class="video-frame" src="{embed_url}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-link">Regarder la vidéo complète sur <a href="{selected_technique['youtube']}" target="_blank">YouTube</a></div>
     </div>
     """,
     unsafe_allow_html=True,
 )
-
-main_col, side_col = st.columns([2, 1], gap="large")
-with main_col:
-    st.subheader("Description rapide")
-    st.write(selected_technique["description"])
-    st.markdown("**Lien YouTube**")
-    st.markdown(f"[{selected_technique['youtube']}]({selected_technique['youtube']})")
-    if len(filtered_techniques) > 1:
-        other_techniques = [t["name"] for t in filtered_techniques if t["name"] != selected_name]
-        pills = "".join(f'<span class="pill">{name}</span>' for name in other_techniques[:10])
-        st.markdown("<div class='section-title'>Autres prises dans cette catégorie</div>" + f"<div class='pill-row'>{pills}</div>", unsafe_allow_html=True)
-with side_col:
-    st.subheader("Vidéo")
-    st.video(selected_technique["youtube"])
-    st.markdown(
-        "<div class='small-card'><strong>Conseil mobile :</strong> faites défiler la page vers le bas pour voir la vidéo en plein écran.</div>",
-        unsafe_allow_html=True,
-    )
