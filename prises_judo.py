@@ -5,6 +5,8 @@ from urllib.parse import quote
 
 import streamlit as st
 
+from judo_utils import extract_youtube_id
+
 st.set_page_config(
     page_title="Prises de judo",
     page_icon="🥋",
@@ -13,16 +15,6 @@ st.set_page_config(
 
 DATA_PATH = Path(__file__).with_name("techniques.json")
 JUDO_TECHNIQUES = json.loads(DATA_PATH.read_text(encoding="utf-8"))
-
-def extract_youtube_id(url: str) -> str:
-    if "youtu.be/" in url:
-        return url.split("youtu.be/")[1].split("?")[0].split("&")[0]
-    if "/shorts/" in url:
-        return url.split("/shorts/")[1].split("?")[0].split("&")[0]
-    if "watch?v=" in url:
-        return url.split("watch?v=")[1].split("&")[0]
-    return url
-
 
 st.markdown(
     """
@@ -631,13 +623,14 @@ selected_technique = category_techniques[technique_names.index(selected_name)]
 
 video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
+escaped_video_id = escape(video_id)
 
 st.markdown(
     f"""
     <div class="tech-panel">
         <p class="tech-description">{escape(selected_technique["description"])}</p>
         <div class="video-wrapper">
-            <iframe id="video-{video_id}" key="{video_id}" class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="video-{escaped_video_id}" key="{escaped_video_id}" class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
     """,
