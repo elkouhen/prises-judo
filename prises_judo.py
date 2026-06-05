@@ -661,13 +661,11 @@ st.button(
     "←",
     on_click=select_technique,
     args=(technique_names[previous_index],),
-    help="Technique précédente",
     key="landscape_previous_button",
 )
 st.button(
     "→",
     on_click=select_technique,
     args=(technique_names[next_index],),
-    help="Technique suivante",
     key="landscape_next_button",
 )
