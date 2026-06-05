@@ -251,41 +251,39 @@ st.markdown(
             box-shadow: 0 7px 16px rgba(42, 35, 24, 0.08);
         }
 
-        @media (orientation: portrait) and (max-width: 950px) {
-            .tech-panel .standard-navigation {
-                position: absolute;
-                top: 0.55rem;
-                right: 0.55rem;
-                margin: 0;
-                gap: 0.34rem;
-                padding: 0.22rem;
-                border: 0;
-                background: transparent;
-                box-shadow: none;
-                z-index: 2;
-            }
+        .tech-panel .standard-navigation {
+            position: absolute;
+            top: 0.55rem;
+            right: 0.55rem;
+            margin: 0;
+            gap: 0.34rem;
+            padding: 0.22rem;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            z-index: 2;
+        }
 
-            .tech-panel .standard-nav-button {
-                width: 2.32rem;
-                height: 2.32rem;
-                border: 0;
-                background: transparent;
-                box-shadow: none;
-                font-size: 1.18rem;
-            }
+        .tech-panel .standard-nav-button {
+            width: 2.32rem;
+            height: 2.32rem;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            font-size: 1.18rem;
+        }
 
-            .tech-panel .standard-nav-button:hover,
-            .tech-panel .standard-nav-button:focus,
-            .tech-panel .standard-nav-button:active {
-                border: 0 !important;
-                background: transparent !important;
-                box-shadow: none !important;
-            }
+        .tech-panel .standard-nav-button:hover,
+        .tech-panel .standard-nav-button:focus,
+        .tech-panel .standard-nav-button:active {
+            border: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
 
-            .tech-panel .technique-name {
-                min-height: 2.85rem;
-                padding-right: 6.2rem;
-            }
+        .tech-panel .technique-name {
+            min-height: 2.85rem;
+            padding-right: 6.2rem;
         }
 
         @media (orientation: landscape) and (max-width: 950px) and (max-height: 500px) and (pointer: coarse) {
