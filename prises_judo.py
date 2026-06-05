@@ -80,23 +80,6 @@ st.markdown(
             border: 0;
         }
 
-        .judo-landscape-nav {
-            display: none;
-        }
-
-        .judo-nav-button {
-            width: 3rem;
-            height: 3rem;
-            padding: 0;
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            background: var(--panel);
-            color: var(--ink);
-            font-size: 1.4rem;
-            line-height: 1;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
-        }
-
         .app-title {
             display: none;
             align-items: center;
@@ -199,11 +182,6 @@ st.markdown(
         .stVerticalBlock {
             padding: 0 !important;
         }
-        
-        .judo-nav-button:active {
-            background: var(--accent-soft);
-            border-color: var(--accent);
-        }
 
         [data-testid="stElementContainer"]:has(iframe[height="0"]) {
             display: none;
@@ -248,27 +226,41 @@ st.markdown(
                 background: #000 !important;
             }
 
-            .judo-landscape-nav {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 1.5rem;
+            .stButton.judo-landscape-previous-button,
+            .stButton.judo-landscape-next-button {
+                display: block !important;
                 position: fixed;
                 right: 1.5rem;
-                top: 50%;
-                transform: translateY(-50%);
                 z-index: 9999;
             }
-            
-            .judo-nav-button {
-                background: rgba(255, 255, 255, 0.85);
-                backdrop-filter: blur(4px);
-                border: none;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+
+            .stButton.judo-landscape-previous-button {
+                top: calc(50% - 4.25rem);
+            }
+
+            .stButton.judo-landscape-next-button {
+                top: calc(50% + 0.75rem);
+            }
+
+            .stButton.judo-landscape-previous-button button,
+            .stButton.judo-landscape-next-button button {
                 width: 3.5rem;
                 height: 3.5rem;
+                min-width: 3.5rem;
+                padding: 0;
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(4px);
+                border: 0;
+                border-radius: 999px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
                 font-size: 1.6rem;
+                line-height: 1;
+                color: var(--ink);
+            }
+
+            .stButton.judo-landscape-previous-button button:active,
+            .stButton.judo-landscape-next-button button:active {
+                background: rgba(255, 255, 255, 0.95);
             }
         }
 
@@ -339,59 +331,46 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
     )
 
 
-def add_landscape_swipe_navigation_js() -> None:
+def mark_landscape_navigation_buttons() -> None:
     st.html(
         """
         <script>
-        (function() {
-            const doc = window.parent.document;
+            function markLandscapeNavigationButtons() {
+                const doc = window.parent.document;
+                const buttons = Array.from(doc.querySelectorAll('button'));
 
-            function isLandscape() {
-                const win = window.parent;
-                return win.innerWidth > win.innerHeight;
-            }
+                buttons.forEach((button) => {
+                    const label = button.textContent.trim();
+                    const wrapper = button.closest('.stButton');
 
-            function getPrevBtn() {
-                const btns = Array.from(doc.querySelectorAll('button[kind="secondary"]'));
-                return btns.find(btn => btn.querySelector('div[data-testid="stMarkdownContainer"] p')?.textContent.trim() === '←');
-            }
+                    if (!wrapper) return;
 
-            function getNextBtn() {
-                const btns = Array.from(doc.querySelectorAll('button[kind="secondary"]'));
-                return btns.find(btn => btn.querySelector('div[data-testid="stMarkdownContainer"] p')?.textContent.trim() === '→');
-            }
+                    if (label === '←') {
+                        wrapper.classList.add('judo-landscape-previous-button');
+                    }
 
-            function ensureNavBindings() {
-                Array.from(doc.querySelectorAll('.judo-nav-button')).forEach((btn) => {
-                    if (btn._judoNavBound) return;
-                    btn._judoNavBound = true;
-                    btn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const target = btn.dataset.direction === 'next' ? getNextBtn() : getPrevBtn();
-                        if (target) {
-                           target.click();
-                        } else {
-                           console.log("Streamlit button not found");
-                        }
-                    });
+                    if (label === '→') {
+                        wrapper.classList.add('judo-landscape-next-button');
+                    }
                 });
             }
 
-            if (doc._judoNavObserverBound) return;
-            doc._judoNavObserverBound = true;
+            markLandscapeNavigationButtons();
+            window.parent.setTimeout(markLandscapeNavigationButtons, 250);
+            window.parent.setTimeout(markLandscapeNavigationButtons, 750);
 
-            ensureNavBindings();
-            window.parent.setTimeout(ensureNavBindings, 250);
-            window.parent.setTimeout(ensureNavBindings, 750);
-
-            const observer = new MutationObserver(function() {
-                ensureNavBindings();
-            });
-            observer.observe(doc.body, { childList: true, subtree: true });
-        })();
+            if (!window.parent.document._judoNavButtonMarkerBound) {
+                window.parent.document._judoNavButtonMarkerBound = true;
+                const observer = new MutationObserver(markLandscapeNavigationButtons);
+                observer.observe(window.parent.document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            }
         </script>
         """
     )
+
 
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
@@ -410,6 +389,7 @@ previous_index = (current_index - 1) % len(technique_names)
 next_index = (current_index + 1) % len(technique_names)
 
 prevent_mobile_keyboard_on_selectboxes()
+mark_landscape_navigation_buttons()
 
 st.markdown(
     """
@@ -457,7 +437,6 @@ with technique_column:
     )
 
 selected_technique = category_techniques[technique_names.index(selected_name)]
-add_landscape_swipe_navigation_js()
 
 video_id = extract_youtube_id(selected_technique["youtube"])
 embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1"
@@ -469,10 +448,6 @@ st.markdown(
         <div class="video-wrapper">
             <iframe id="video-{video_id}" key="{video_id}" class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <div class="judo-landscape-nav" aria-hidden="true">
-            <button type="button" class="judo-nav-button" data-direction="prev" aria-label="Technique précédente">←</button>
-            <button type="button" class="judo-nav-button" data-direction="next" aria-label="Technique suivante">→</button>
-        </div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -483,12 +458,12 @@ st.button(
     on_click=select_technique,
     args=(technique_names[previous_index],),
     help="Technique précédente",
-    key="hidden_previous_button",
+    key="landscape_previous_button",
 )
 st.button(
     "→",
     on_click=select_technique,
     args=(technique_names[next_index],),
     help="Technique suivante",
-    key="hidden_next_button",
+    key="landscape_next_button",
 )
