@@ -21,7 +21,7 @@
     "category": "Koshi waza",
     "name": "Hane-goshi",
     "youtube": "https://www.youtube.com/watch?v=M9_7De6A1kk",
-    "description": "Projection de hanche avec coup de jambe ascendant pour déséquilibrer et lancer."
+    "description": "Projection de hanche où la jambe ressort et accompagne l'action de hanche pour soulever et projeter."
   },
   {
     "category": "Koshi waza",
@@ -51,13 +51,14 @@
     "category": "Koshi waza",
     "name": "Kubi-nage",
     "youtube": "https://www.youtube.com/watch?v=F-4fyNwx52w",
-    "description": "Projection de hanche utilisant la tête ou le cou pour diriger l'adversaire."
+    "description": "Projection de hanche avec contrôle haut du buste, proche d'une action autour du cou.",
+    "safety_note": "À travailler avec prudence : le contrôle du cou ne doit jamais provoquer de torsion dangereuse."
   },
   {
     "category": "Koshi waza",
     "name": "Harai-goshi",
     "youtube": "https://www.youtube.com/watch?v=qTo8HlAAkOo",
-    "description": "Projection de hanche avec balayage de jambe pour balayer l'adversaire sur le côté."
+    "description": "Projection de hanche où la jambe balaie la jambe d'appui d'uke pendant la rotation."
   },
   {
     "category": "Te waza",
@@ -81,25 +82,28 @@
     "category": "Te waza",
     "name": "Tai-otoshi",
     "youtube": "https://www.youtube.com/watch?v=4x6S3Q-Ktv8",
-    "description": "Projection au corps coupé avec blocage de jambe pour faire tomber l'adversaire."
+    "description": "Projection de main où l'on crée un barrage avec la jambe sans charger uke sur la hanche."
   },
   {
     "category": "Te waza",
     "name": "Kata-guruma",
     "youtube": "https://www.youtube.com/watch?v=cnHRhSy8yi4",
-    "description": "Projection en portant l'adversaire sur l'épaule avant de le déposer au sol."
+    "description": "Projection d'épaule où uke est chargé en travers des épaules avant d'être projeté.",
+    "competition_note": "Les formes avec saisie directe de jambe sont restreintes en compétition IJF moderne."
   },
   {
     "category": "Te waza",
     "name": "Te-guruma",
     "youtube": "https://www.youtube.com/watch?v=P-4HUgB_rK4",
-    "description": "Projection en saisissant la jambe pour lever et tourner l'adversaire."
+    "description": "Projection de main en soulevant et tournant uke à partir d'une saisie de jambe.",
+    "competition_note": "Technique à saisie de jambe restreinte en compétition IJF moderne."
   },
   {
     "category": "Te waza",
     "name": "Morote-gari",
     "youtube": "https://www.youtube.com/watch?v=BHLQS4K85bs",
-    "description": "Double attaque de jambes en saisissant les deux jambes de l'adversaire."
+    "description": "Projection par double ramassement des jambes en avançant dans le déséquilibre d'uke.",
+    "competition_note": "Technique à saisie de jambes interdite ou fortement restreinte en compétition IJF moderne."
   },
   {
     "category": "Te waza",
@@ -111,13 +115,15 @@
     "category": "Te waza",
     "name": "Kibisu-gaeshi",
     "youtube": "https://www.youtube.com/watch?v=tJylJYfBliA",
-    "description": "Renversement rapide en attrapant le talon de l'adversaire."
+    "description": "Renversement par saisie du talon, appliqué au moment où uke avance ou se déséquilibre.",
+    "competition_note": "Technique à saisie de jambe restreinte en compétition IJF moderne."
   },
   {
     "category": "Te waza",
     "name": "Kuchiki-taoshi",
     "youtube": "https://www.youtube.com/watch?v=ZNL47q1aJNY",
-    "description": "Projection de saisie de jambe pour faire tomber l'adversaire vers l'avant."
+    "description": "Projection par saisie d'une jambe et action de renversement pour faire tomber uke.",
+    "competition_note": "Technique à saisie de jambe restreinte en compétition IJF moderne."
   },
   {
     "category": "Te waza",
@@ -129,37 +135,37 @@
     "category": "Ashi waza",
     "name": "O-soto-gari",
     "youtube": "https://www.youtube.com/watch?v=c-A_nP7mKAc",
-    "description": "Balayage extérieur de la jambe pour faire tomber l'adversaire vers l'arrière."
+    "description": "Grand fauchage extérieur de la jambe d'uke pendant un déséquilibre vers l'arrière."
   },
   {
     "category": "Ashi waza",
     "name": "Ko-soto-gari",
     "youtube": "https://www.youtube.com/watch?v=jeQ541ScLB4",
-    "description": "Petit balayage extérieur pour déséquilibrer l'adversaire vers l'arrière."
+    "description": "Petit fauchage extérieur du pied ou de la jambe d'uke vers l'arrière."
   },
   {
     "category": "Ashi waza",
     "name": "Ko-uchi-gari",
     "youtube": "https://www.youtube.com/watch?v=3Jb3tZvr9Ng",
-    "description": "Balayage intérieur sur la jambe pour faire chuter l'adversaire."
+    "description": "Petit fauchage intérieur de la jambe d'uke, souvent utilisé pour ouvrir ou conclure une attaque."
   },
   {
     "category": "Ashi waza",
     "name": "Sasae-tsurikomi-ashi",
     "youtube": "https://www.youtube.com/watch?v=699i--pvYmE",
-    "description": "Blocage de la cheville pour stopper l'avancée du pied de l'adversaire et le faire tomber."
+    "description": "Blocage du pied ou de la cheville d'uke combiné à une action de traction et de levée."
   },
   {
     "category": "Ashi waza",
     "name": "O-uchi-gari",
     "youtube": "https://www.youtube.com/watch?v=0itJFhV9pDQ",
-    "description": "Balayage intérieur de la jambe pour tirer l'adversaire vers l'arrière."
+    "description": "Grand fauchage intérieur de la jambe d'uke pendant un déséquilibre vers l'arrière."
   },
   {
     "category": "Ashi waza",
     "name": "Uchi-mata",
     "youtube": "https://www.youtube.com/watch?v=iUpSu5J-bgw",
-    "description": "Projection de cuisse qui élève l'adversaire et le fait basculer sur le côté."
+    "description": "Projection par l'intérieur de la cuisse, avec rotation du corps et élévation de la jambe."
   },
   {
     "category": "Ashi waza",
@@ -169,75 +175,77 @@
   },
   {
     "category": "Ashi waza",
-    "name": "Osoto-otoshi",
+    "name": "O-soto-otoshi",
     "youtube": "https://www.youtube.com/watch?v=2DsVvDw7b8g",
-    "description": "Projection de l'extérieur du pied en utilisant le déséquilibre vers l'arrière."
+    "description": "Renversement extérieur où la jambe de tori bloque ou descend derrière celle d'uke."
   },
   {
     "category": "Ashi waza",
     "name": "Okuri-ashi-barai",
     "youtube": "https://www.youtube.com/watch?v=nw1ZdRjrdRI",
-    "description": "Balayage des deux jambes adverses en déplaçant le pied du même côté."
+    "description": "Balayage des deux pieds d'uke lorsqu'ils se rapprochent pendant un déplacement latéral.",
+    "technical_note": "Romanisation courante aussi rencontrée : Okuri-ashi-harai."
   },
   {
     "category": "Ashi waza",
     "name": "Hiza-guruma",
     "youtube": "https://www.youtube.com/watch?v=JPJx9-oAVns",
-    "description": "Blocage du genou pour faire basculer l'adversaire par rotation."
+    "description": "Blocage près du genou combiné à une rotation pour faire pivoter uke autour du point d'appui."
   },
   {
     "category": "Ashi waza",
     "name": "De-ashi-harai",
     "youtube": "https://www.youtube.com/watch?v=4BUUvqxi_Kk",
-    "description": "Balayage du pied avancé au moment du déplacement de l'adversaire."
+    "description": "Balayage du pied qui avance au moment précis où uke transfère son poids.",
+    "technical_note": "Romanisation courante aussi rencontrée : De-ashi-barai."
   },
   {
     "category": "Ashi waza",
     "name": "Ashi-guruma",
     "youtube": "https://www.youtube.com/watch?v=ROeayhvom9U",
-    "description": "Projection qui utilise la jambe comme pivot pour tourner l'adversaire."
+    "description": "Projection où la jambe sert d'axe de rotation contre la jambe ou le corps d'uke."
   },
   {
     "category": "Ashi waza",
     "name": "Harai-tsurikomi-ashi",
     "youtube": "https://www.youtube.com/watch?v=gGPXvWL8VbE",
-    "description": "Balayage combiné avec levage de la manche pour déséquilibrer et jeter."
+    "description": "Balayage du pied d'uke combiné à l'action de traction et de levée des mains."
   },
   {
     "category": "Sutemi waza",
-    "name": "Tani otoshi",
+    "name": "Tani-otoshi",
     "youtube": "https://www.youtube.com/watch?v=3b9Me3Fohpk",
-    "description": "Projection où l'on se laisse tomber en arrière pour tirer l'adversaire au sol."
+    "description": "Sacrifice latéral/arrière où tori descend derrière uke pour le renverser dans le vide créé."
   },
   {
     "category": "Sutemi waza",
     "name": "Yoko-guruma",
     "youtube": "https://www.youtube.com/watch?v=MehP6I5cY2c",
-    "description": "Projection latérale où l'on bascule l'adversaire en se couchant sur le côté."
+    "description": "Sacrifice latéral où tori roule sous ou autour d'uke pour l'entraîner en rotation."
   },
   {
     "category": "Sutemi waza",
     "name": "Tomoe-nage",
     "youtube": "https://www.youtube.com/watch?v=880WbHvHv6A",
-    "description": "Projection en cercle effectuée en tombant sur le dos et en poussant avec le pied."
+    "description": "Sacrifice arrière où tori tombe sur le dos et projette uke en cercle avec le pied placé au corps."
   },
   {
     "category": "Sutemi waza",
     "name": "Sumi-gaeshi",
     "youtube": "https://www.youtube.com/watch?v=5VhduA5xkbA",
-    "description": "Projection en se laissant tomber en arrière pour faire pivoter l'adversaire."
+    "description": "Sacrifice arrière en coin où tori place le pied à l'intérieur de la cuisse pour faire tourner uke."
   },
   {
     "category": "Sutemi waza",
     "name": "Soto-maki-komi",
     "youtube": "https://www.youtube.com/watch?v=bWG9O1BVKtQ",
-    "description": "Projection circulaire en tournant l'adversaire autour de son propre corps."
+    "description": "Sacrifice latéral où tori enroule uke dans sa rotation extérieure en descendant au sol."
   },
   {
     "category": "Sutemi waza",
     "name": "Ura-nage",
     "youtube": "https://www.youtube.com/watch?v=Fgi9b8DJ5sQ",
-    "description": "Projection arrière en soulevant l'adversaire avec le dos et en le posant au sol."
+    "description": "Sacrifice arrière où tori soulève uke par l'avant ou le côté avant de tomber en arrière."
   },
   {
     "category": "Osaekomi",
@@ -255,7 +263,7 @@
     "category": "Osaekomi",
     "name": "Kuzure-gesa-gatame",
     "youtube": "https://www.youtube.com/watch?v=Q2fb9jaoUFQ",
-    "description": "Variation du gésa-gatame avec une prise plus lâche sur la tête."
+    "description": "Variation de gésa-gatame où le contrôle de la tête est remplacé ou modifié pour stabiliser uke."
   },
   {
     "category": "Osaekomi",
@@ -267,13 +275,14 @@
     "category": "Osaekomi",
     "name": "Tate-shiho-gatame",
     "youtube": "https://www.youtube.com/watch?v=55-rFmBx53g",
-    "description": "Immobilisation montant, assis sur le buste de l'adversaire."
+    "description": "Immobilisation à cheval, dans l'axe d'uke, avec contrôle du haut du corps."
   },
   {
     "category": "Osaekomi",
     "name": "Kata-gatame",
     "youtube": "https://www.youtube.com/watch?v=zQR3IOXxO_Q",
-    "description": "Immobilisation en utilisant le bras et l'épaule pour comprimer le cou."
+    "description": "Immobilisation par contrôle de la tête, de l'épaule et d'un bras d'uke.",
+    "technical_note": "Selon l'application, Kata-gatame peut aussi devenir une forme d'étranglement."
   },
   {
     "category": "Osaekomi",
@@ -297,7 +306,7 @@
     "category": "Shime waza",
     "name": "Gyaku-juji-jime",
     "youtube": "https://www.youtube.com/watch?v=t3tQriIPdlI",
-    "description": "Étranglement croisé utilisant les deux avant-bras sur le col."
+    "description": "Étranglement croisé avec les mains inversées, paumes orientées vers le haut sur les revers."
   },
   {
     "category": "Shime waza",
@@ -309,19 +318,19 @@
     "category": "Shime waza",
     "name": "Nami-juji-jime",
     "youtube": "https://www.youtube.com/watch?v=k2cHry9HByQ",
-    "description": "Étranglement croisé classique en utilisant le revers de la veste."
+    "description": "Étranglement croisé avec les deux mains en prise normale sur les revers."
   },
   {
     "category": "Shime waza",
     "name": "Kata-ha-jime",
     "youtube": "https://www.youtube.com/watch?v=yaTGgRjnwB8",
-    "description": "Étranglement d'un seul côté avec une prise du revers et du cou."
+    "description": "Étranglement avec contrôle d'un revers et immobilisation d'un bras d'uke."
   },
   {
     "category": "Shime waza",
     "name": "Kata-juji-jime",
     "youtube": "https://www.youtube.com/watch?v=3VZVUAmiMD8",
-    "description": "Étranglement croisé serré utilisant une main sur le revers et l'autre sur la nuque."
+    "description": "Étranglement croisé avec une main en prise normale et l'autre en prise inversée."
   },
   {
     "category": "Shime waza",
@@ -339,11 +348,11 @@
     "category": "Shime waza",
     "name": "Okuri-eri-jime",
     "youtube": "https://www.youtube.com/watch?v=EiqyoVcIAi8",
-    "description": "Étranglement avec une main qui tire le revers et l'autre qui contrôle le cou."
+    "description": "Étranglement par glissement du revers, souvent appliqué depuis le dos avec contrôle du col."
   },
   {
     "category": "Kansetsu waza",
-    "name": "Ude garami",
+    "name": "Ude-garami",
     "youtube": "https://www.youtube.com/watch?v=AIlTvZb4RlE",
     "description": "Clef de bras en torsion pour contrôler le coude et l'épaule."
   },
@@ -351,7 +360,7 @@
     "category": "Kansetsu waza",
     "name": "Ude-hishigi-hara-gatame",
     "youtube": "https://www.youtube.com/watch?v=ZzEycg8R_9M",
-    "description": "Clef de bras au sol avec pression sur l'avant-bras et le biceps."
+    "description": "Clef de bras où le ventre sert de point d'appui pour exercer une pression sur le coude."
   },
   {
     "category": "Kansetsu waza",
@@ -369,7 +378,7 @@
     "category": "Kansetsu waza",
     "name": "Ude-hishigi-hiza-gatame",
     "youtube": "https://www.youtube.com/watch?v=H2HtAJdiJcE",
-    "description": "Clef de bras utilisant le genou comme point de levier."
+    "description": "Clef de bras où le genou sert de point d'appui pour agir sur l'articulation du coude."
   },
   {
     "category": "Kansetsu waza",
@@ -381,78 +390,79 @@
     "category": "Kansetsu waza",
     "name": "Hiza-gatame",
     "youtube": "https://www.youtube.com/watch?v=H7VXS0cvGKU",
-    "description": "Clef de bras utilisant le genou comme point d'appui pour forcer l'articulation du coude."
+    "description": "Nom abrégé souvent utilisé pour Ude-hishigi-hiza-gatame.",
+    "technical_note": "Entrée conservée comme variante de nom ; la forme Kodokan complète est Ude-hishigi-hiza-gatame."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Jodan-naname-shuto",
     "youtube": "https://www.youtube.com/watch?v=rrIaF9mXpiQ",
-    "description": "Coupe diagonale de la main haute inspirée des techniques de ju-jitsu."
+    "description": "Atemi de main ouverte en diagonale haute, issu d'un travail de self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Mae-dori",
     "youtube": "https://www.youtube.com/watch?v=b7vg80ByuNk",
-    "description": "Saisie avant du revers ou du col pour contrôler l'adversaire."
+    "description": "Saisie de face du vêtement, utilisée comme situation de départ en self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Mae-kubi-dori",
     "youtube": "https://www.youtube.com/watch?v=LYRGJI0Oi9M",
-    "description": "Saisie du cou à l'avant pour manipuler la posture de l'adversaire."
+    "description": "Saisie frontale du cou, utilisée comme attaque de référence en self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Chudan-gyaku-tsuki",
     "youtube": "https://www.youtube.com/watch?v=T1lFQA92jYo",
-    "description": "Frappe médiane inversée inspirée des techniques de ju-jitsu."
+    "description": "Atemi direct inversé au niveau moyen, travaillé dans un cadre de self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Eri-dori",
     "youtube": "https://www.youtube.com/watch?v=obPFgYk1HZA",
-    "description": "Saisie du revers pour préparer une projection ou une immobilisation."
+    "description": "Saisie du revers, utilisée comme situation d'attaque ou de contrôle en self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Yoko-dori",
     "youtube": "https://www.youtube.com/watch?v=-lCkfc-mSEk",
-    "description": "Saisie latérale pour contrôler le corps de l'adversaire."
+    "description": "Saisie latérale du vêtement ou du corps, utilisée comme situation de départ."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Yoko-kubi-dori",
     "youtube": "https://www.youtube.com/watch?v=djZcAPJRslY",
-    "description": "Saisie latérale du cou pour diriger l'adversaire sur le côté."
+    "description": "Saisie latérale du cou, utilisée comme attaque de référence en self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Chudan-mawashi-geri",
     "youtube": "https://www.youtube.com/watch?v=aCVXZZYAWlw",
-    "description": "Coup de pied circulaire au corps inspiré des techniques de self-défense."
+    "description": "Atemi de pied circulaire au niveau moyen, travaillé dans un cadre de self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Yoko-sode-dori",
     "youtube": "https://www.youtube.com/watch?v=JvoC4Cmawrw",
-    "description": "Saisie de la manche sur le côté pour contrôler l'équilibre de l'adversaire."
+    "description": "Saisie latérale de la manche, utilisée comme situation d'attaque ou de contrôle."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Chudan-mae-geri-kekomi",
     "youtube": "https://www.youtube.com/watch?v=Z1hf3CPlwRk",
-    "description": "Coup de pied frontal direct au corps pour ouvrir la garde."
+    "description": "Atemi de pied frontal pénétrant au niveau moyen, travaillé dans un cadre de self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Jodan-oi-tsuki",
     "youtube": "https://www.youtube.com/watch?v=8YyVT1aKzvI",
-    "description": "Direct montant du bras pour toucher la zone haute du torse ou du visage."
+    "description": "Atemi direct au niveau haut, travaillé dans un cadre de self-défense."
   },
   {
-    "category": "Judo jujitsu",
+    "category": "Jujitsu / Atemi",
     "name": "Katate-dori",
     "youtube": "https://www.youtube.com/watch?v=auzBXYyp1C4",
-    "description": "Saisie d'une main pour diriger et préparer une transition ou une projection."
+    "description": "Saisie d'un poignet ou d'une main, utilisée comme situation de départ en self-défense."
   }
 ]
