@@ -309,9 +309,9 @@ st.markdown(
                 height: 2.75rem;
                 border: 0;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.88);
+                background: rgba(255, 255, 255, 0.94);
                 color: var(--ink);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.26);
+                box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16);
                 font-size: 1.08rem;
                 font-weight: 800;
                 line-height: 1;
@@ -320,8 +320,9 @@ st.markdown(
             }
 
             .landscape-nav-toggle {
-                top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+                top: 50%;
                 left: calc(env(safe-area-inset-left, 0px) + 0.75rem);
+                transform: translateY(-50%);
             }
 
             .landscape-nav-close {
@@ -339,11 +340,11 @@ st.markdown(
                 width: min(22rem, calc(100vw - 7.25rem));
                 padding: 3.7rem 0.75rem 0.75rem;
                 overflow: auto;
-                border: 1px solid rgba(255, 255, 255, 0.34);
+                border: 1px solid var(--line);
                 border-radius: 8px;
-                background: rgba(17, 24, 39, 0.78);
+                background: rgba(255, 255, 255, 0.92);
                 backdrop-filter: blur(8px);
-                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+                box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
             }
 
             .landscape-nav-state:checked ~ .landscape-nav-toggle {
@@ -366,9 +367,9 @@ st.markdown(
             .landscape-nav-technique {
                 display: inline-flex;
                 align-items: center;
-                border: 1px solid rgba(255, 255, 255, 0.16);
-                color: #fff;
-                text-decoration: none;
+                border: 1px solid rgba(17, 24, 39, 0.12);
+                color: var(--ink) !important;
+                text-decoration: none !important;
                 -webkit-tap-highlight-color: transparent;
             }
 
@@ -377,15 +378,16 @@ st.markdown(
                 min-height: 2rem;
                 padding: 0 0.7rem;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.12);
+                background: rgba(244, 246, 248, 0.88);
                 font-size: 0.82rem;
                 font-weight: 700;
                 white-space: nowrap;
             }
 
             .landscape-nav-category.is-active {
-                background: rgba(255, 255, 255, 0.92);
-                color: var(--ink);
+                border-color: rgba(31, 75, 110, 0.22);
+                background: var(--accent-soft);
+                color: var(--accent) !important;
             }
 
             .landscape-nav-techniques {
@@ -397,14 +399,15 @@ st.markdown(
                 min-height: 2.25rem;
                 padding: 0.4rem 0.65rem;
                 border-radius: 8px;
-                background: rgba(255, 255, 255, 0.10);
+                background: rgba(244, 246, 248, 0.88);
                 font-size: 0.92rem;
                 font-weight: 650;
             }
 
             .landscape-nav-technique.is-active {
-                background: rgba(255, 255, 255, 0.92);
-                color: var(--ink);
+                border-color: rgba(31, 75, 110, 0.22);
+                background: var(--accent-soft);
+                color: var(--accent) !important;
             }
         }
 
