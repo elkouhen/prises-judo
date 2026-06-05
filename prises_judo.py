@@ -615,7 +615,6 @@ with category_column:
     selected_category = st.selectbox(
         "Catégorie",
         categories,
-        index=categories.index(st.session_state.selected_category),
         label_visibility="collapsed",
         key="selected_category",
         on_change=reset_selected_name,
@@ -628,7 +627,6 @@ with technique_column:
     selected_name = st.selectbox(
         "Prise",
         technique_names,
-        index=technique_names.index(st.session_state.selected_name),
         format_func=format_technique_name,
         label_visibility="collapsed",
         key="selected_name",
