@@ -1,6 +1,7 @@
 from html import escape
 import json
 from pathlib import Path
+from urllib.parse import quote
 
 import streamlit as st
 
@@ -188,6 +189,10 @@ st.markdown(
             display: none;
         }
 
+        .landscape-nav {
+            display: none;
+        }
+
         @media (orientation: landscape) {
             .block-container {
                 max-width: 100% !important;
@@ -284,6 +289,123 @@ st.markdown(
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
                 transform: none !important;
             }
+
+            .landscape-nav {
+                display: block;
+            }
+
+            .landscape-nav-state {
+                display: none;
+            }
+
+            .landscape-nav-toggle,
+            .landscape-nav-close {
+                position: fixed;
+                z-index: 10020;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 2.75rem;
+                height: 2.75rem;
+                border: 0;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.88);
+                color: var(--ink);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.26);
+                font-size: 1.08rem;
+                font-weight: 800;
+                line-height: 1;
+                text-decoration: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .landscape-nav-toggle {
+                top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+                left: calc(env(safe-area-inset-left, 0px) + 0.75rem);
+            }
+
+            .landscape-nav-close {
+                top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+                left: calc(env(safe-area-inset-left, 0px) + 0.75rem);
+            }
+
+            .landscape-nav-panel {
+                position: fixed;
+                top: calc(env(safe-area-inset-top, 0px) + 0.5rem);
+                left: calc(env(safe-area-inset-left, 0px) + 0.5rem);
+                bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+                z-index: 10010;
+                display: none;
+                width: min(22rem, calc(100vw - 7.25rem));
+                padding: 3.7rem 0.75rem 0.75rem;
+                overflow: auto;
+                border: 1px solid rgba(255, 255, 255, 0.34);
+                border-radius: 8px;
+                background: rgba(17, 24, 39, 0.78);
+                backdrop-filter: blur(8px);
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+            }
+
+            .landscape-nav-state:checked ~ .landscape-nav-toggle {
+                display: none;
+            }
+
+            .landscape-nav-state:checked ~ .landscape-nav-panel {
+                display: block;
+            }
+
+            .landscape-nav-categories {
+                display: flex;
+                gap: 0.45rem;
+                margin-bottom: 0.75rem;
+                overflow-x: auto;
+                padding-bottom: 0.15rem;
+            }
+
+            .landscape-nav-category,
+            .landscape-nav-technique {
+                display: inline-flex;
+                align-items: center;
+                border: 1px solid rgba(255, 255, 255, 0.16);
+                color: #fff;
+                text-decoration: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .landscape-nav-category {
+                flex: 0 0 auto;
+                min-height: 2rem;
+                padding: 0 0.7rem;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.12);
+                font-size: 0.82rem;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+
+            .landscape-nav-category.is-active {
+                background: rgba(255, 255, 255, 0.92);
+                color: var(--ink);
+            }
+
+            .landscape-nav-techniques {
+                display: grid;
+                gap: 0.38rem;
+            }
+
+            .landscape-nav-technique {
+                min-height: 2.25rem;
+                padding: 0.4rem 0.65rem;
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.10);
+                font-size: 0.92rem;
+                font-weight: 650;
+            }
+
+            .landscape-nav-technique.is-active {
+                background: rgba(255, 255, 255, 0.92);
+                color: var(--ink);
+            }
         }
 
         @media (max-width: 480px) and (orientation: portrait) {
@@ -317,10 +439,96 @@ def format_technique_name(name: str) -> str:
 def reset_selected_name() -> None:
     category_techniques = get_category_techniques(st.session_state.selected_category)
     st.session_state.selected_name = category_techniques[0]["name"]
+    sync_selection_query_params(
+        st.session_state.selected_category,
+        st.session_state.selected_name,
+    )
 
 
 def select_technique(name: str) -> None:
     st.session_state.selected_name = name
+    sync_selection_query_params(st.session_state.selected_category, name)
+
+
+def sync_selected_name() -> None:
+    sync_selection_query_params(
+        st.session_state.selected_category,
+        st.session_state.selected_name,
+    )
+
+
+def sync_selection_query_params(category: str, name: str) -> None:
+    st.query_params["category"] = category
+    st.query_params["technique"] = name
+
+
+def get_selection_url(category: str, name: str) -> str:
+    return f"?category={quote(category)}&technique={quote(name)}"
+
+
+def render_landscape_navigation_overlay(
+    selected_category: str,
+    selected_name: str,
+    selected_category_techniques: list[dict[str, str]],
+) -> None:
+    category_links = []
+    for category in categories:
+        category_first_technique = get_category_techniques(category)[0]["name"]
+        active_class = " is-active" if category == selected_category else ""
+        category_links.append(
+            f'<a class="landscape-nav-category{active_class}" '
+            f'href="{escape(get_selection_url(category, category_first_technique))}" '
+            'target="_self">'
+            f"{escape(category)}</a>"
+        )
+
+    technique_links = []
+    for technique in selected_category_techniques:
+        name = technique["name"]
+        active_class = " is-active" if name == selected_name else ""
+        technique_links.append(
+            f'<a class="landscape-nav-technique{active_class}" '
+            f'href="{escape(get_selection_url(selected_category, name))}" '
+            'target="_self">'
+            f"{escape(format_technique_name(name))}</a>"
+        )
+
+    st.markdown(
+        '<div class="landscape-nav" id="landscape-nav">'
+        '<input class="landscape-nav-state" id="landscape-nav-state" '
+        'type="checkbox" aria-hidden="true" />'
+        '<label class="landscape-nav-toggle" for="landscape-nav-state" '
+        'aria-label="Ouvrir la navigation">☰</label>'
+        '<div class="landscape-nav-panel" aria-label="Navigation paysage">'
+        '<label class="landscape-nav-close" for="landscape-nav-state" '
+        'aria-label="Fermer la navigation">×</label>'
+        '<nav class="landscape-nav-categories" aria-label="Catégories">'
+        f"{''.join(category_links)}"
+        "</nav>"
+        '<nav class="landscape-nav-techniques" aria-label="Prises">'
+        f"{''.join(technique_links)}"
+        "</nav>"
+        "</div>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+
+def apply_query_param_selection() -> None:
+    requested_category = st.query_params.get("category")
+    requested_name = st.query_params.get("technique")
+
+    if requested_category not in categories:
+        return
+
+    requested_techniques = get_category_techniques(requested_category)
+    requested_names = [technique["name"] for technique in requested_techniques]
+
+    st.session_state.selected_category = requested_category
+    if requested_name in requested_names:
+        st.session_state.selected_name = requested_name
+    else:
+        st.session_state.selected_name = requested_names[0]
 
 
 def prevent_mobile_keyboard_on_selectboxes() -> None:
@@ -357,6 +565,8 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
         """
     )
 
+
+apply_query_param_selection()
 
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
@@ -419,6 +629,7 @@ with technique_column:
         format_func=format_technique_name,
         label_visibility="collapsed",
         key="selected_name",
+        on_change=sync_selected_name,
     )
 
 selected_technique = category_techniques[technique_names.index(selected_name)]
@@ -436,6 +647,12 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True,
+)
+
+render_landscape_navigation_overlay(
+    selected_category,
+    selected_name,
+    category_techniques,
 )
 
 st.button(

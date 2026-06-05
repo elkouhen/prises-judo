@@ -43,6 +43,13 @@ def assert_mobile_layout() -> None:
                 if is_landscape:
                     expect(next_button).to_be_visible()
                     expect(previous_button).to_be_visible()
+                    expect(page.locator(".landscape-nav-toggle")).to_be_visible()
+                    expect(page.locator(".landscape-nav-panel")).to_be_hidden()
+
+                    page.locator(".landscape-nav-toggle").click()
+                    expect(page.locator(".landscape-nav-panel")).to_be_visible()
+                    assert page.locator(".landscape-nav-category").count() >= 1
+                    assert page.locator(".landscape-nav-technique").count() >= 2
 
                     style = next_button.evaluate(
                         """button => ({
@@ -52,9 +59,16 @@ def assert_mobile_layout() -> None:
                     )
                     assert style["opacity"] == "1"
                     assert style["background"] != "rgba(0, 0, 0, 0)"
+
+                    before_src = page.locator(".video-frame").get_attribute("src")
+                    page.locator(".landscape-nav-technique:not(.is-active)").first.click()
+                    page.wait_for_timeout(1_500)
+                    after_src = page.locator(".video-frame").get_attribute("src")
+                    assert before_src != after_src
                 else:
                     expect(next_button).to_be_hidden()
                     expect(previous_button).to_be_hidden()
+                    expect(page.locator(".landscape-nav-toggle")).to_be_hidden()
 
                 page.close()
         finally:
