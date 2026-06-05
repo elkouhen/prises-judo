@@ -226,24 +226,29 @@ st.markdown(
                 background: #000 !important;
             }
 
-            .stButton.judo-landscape-previous-button,
-            .stButton.judo-landscape-next-button {
+            .st-key-landscape_previous_button,
+            .st-key-landscape_next_button {
                 display: block !important;
                 position: fixed;
                 right: 1.5rem;
                 z-index: 9999;
             }
 
-            .stButton.judo-landscape-previous-button {
+            .st-key-landscape_previous_button {
                 top: calc(50% - 4.25rem);
             }
 
-            .stButton.judo-landscape-next-button {
+            .st-key-landscape_next_button {
                 top: calc(50% + 0.75rem);
             }
 
-            .stButton.judo-landscape-previous-button button,
-            .stButton.judo-landscape-next-button button {
+            .st-key-landscape_previous_button .stButton,
+            .st-key-landscape_next_button .stButton {
+                display: block !important;
+            }
+
+            .st-key-landscape_previous_button button,
+            .st-key-landscape_next_button button {
                 width: 3.5rem;
                 height: 3.5rem;
                 min-width: 3.5rem;
@@ -258,8 +263,8 @@ st.markdown(
                 color: var(--ink);
             }
 
-            .stButton.judo-landscape-previous-button button:active,
-            .stButton.judo-landscape-next-button button:active {
+            .st-key-landscape_previous_button button:active,
+            .st-key-landscape_next_button button:active {
                 background: rgba(255, 255, 255, 0.95);
             }
         }
@@ -331,47 +336,6 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
     )
 
 
-def mark_landscape_navigation_buttons() -> None:
-    st.html(
-        """
-        <script>
-            function markLandscapeNavigationButtons() {
-                const doc = window.parent.document;
-                const buttons = Array.from(doc.querySelectorAll('button'));
-
-                buttons.forEach((button) => {
-                    const label = button.textContent.trim();
-                    const wrapper = button.closest('.stButton');
-
-                    if (!wrapper) return;
-
-                    if (label === '←') {
-                        wrapper.classList.add('judo-landscape-previous-button');
-                    }
-
-                    if (label === '→') {
-                        wrapper.classList.add('judo-landscape-next-button');
-                    }
-                });
-            }
-
-            markLandscapeNavigationButtons();
-            window.parent.setTimeout(markLandscapeNavigationButtons, 250);
-            window.parent.setTimeout(markLandscapeNavigationButtons, 750);
-
-            if (!window.parent.document._judoNavButtonMarkerBound) {
-                window.parent.document._judoNavButtonMarkerBound = true;
-                const observer = new MutationObserver(markLandscapeNavigationButtons);
-                observer.observe(window.parent.document.body, {
-                    childList: true,
-                    subtree: true
-                });
-            }
-        </script>
-        """
-    )
-
-
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = categories[0]
 
@@ -389,7 +353,6 @@ previous_index = (current_index - 1) % len(technique_names)
 next_index = (current_index + 1) % len(technique_names)
 
 prevent_mobile_keyboard_on_selectboxes()
-mark_landscape_navigation_buttons()
 
 st.markdown(
     """
