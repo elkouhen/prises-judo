@@ -82,7 +82,7 @@ st.markdown(
         }
 
         .app-title {
-            display: none;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             margin: 0 0 0.4rem;
@@ -110,12 +110,6 @@ st.markdown(
             width: 1.84rem;
             height: 1.84rem;
             display: block;
-        }
-
-        @media (orientation: portrait) {
-            .app-title {
-                display: inline-flex;
-            }
         }
 
         .tech-description {
@@ -193,7 +187,7 @@ st.markdown(
             display: none;
         }
 
-        @media (orientation: landscape) {
+        @media (orientation: landscape) and (max-width: 950px) and (max-height: 500px) and (pointer: coarse) {
             .block-container {
                 max-width: 100% !important;
                 padding: 0 !important;

@@ -26,8 +26,9 @@ def assert_mobile_layout() -> None:
                 page = browser.new_page(
                     viewport={"width": width, "height": height},
                     is_mobile=True,
+                    has_touch=True,
                 )
-                page.goto(APP_URL, wait_until="networkidle", timeout=15_000)
+                page.goto(APP_URL, wait_until="domcontentloaded", timeout=15_000)
                 page.wait_for_timeout(1_000)
 
                 video = page.locator(".video-wrapper")
@@ -71,6 +72,30 @@ def assert_mobile_layout() -> None:
                     expect(page.locator(".landscape-nav-toggle")).to_be_hidden()
 
                 page.close()
+
+            desktop_page = browser.new_page(
+                viewport={"width": 1280, "height": 720},
+                is_mobile=False,
+                has_touch=False,
+            )
+            desktop_page.goto(APP_URL, wait_until="domcontentloaded", timeout=15_000)
+            desktop_page.wait_for_timeout(1_000)
+
+            expect(desktop_page.locator(".video-wrapper")).to_be_visible()
+            expect(desktop_page.locator(".app-title")).to_be_visible()
+            expect(
+                desktop_page.locator(".st-key-landscape_next_button button").first
+            ).to_be_hidden()
+            expect(
+                desktop_page.locator(".st-key-landscape_previous_button button").first
+            ).to_be_hidden()
+            expect(desktop_page.locator(".landscape-nav-toggle")).to_be_hidden()
+
+            desktop_video_style = desktop_page.locator(".video-wrapper").evaluate(
+                "element => getComputedStyle(element).position"
+            )
+            assert desktop_video_style != "fixed"
+            desktop_page.close()
         finally:
             browser.close()
 

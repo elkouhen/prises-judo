@@ -1,0 +1,15 @@
+Controle des videos via l'application prises-judo
+
+Date du controle : 2026-06-05
+Application testee : http://localhost:8501
+Mode de controle : ouverture de chaque technique dans l'application avec les
+parametres category/technique, puis verification du rendu de l'iframe YouTube
+integree dans la page Streamlit. Les URLs YouTube n'ont pas ete testees en
+acces direct.
+
+Resultat :
+- Techniques controlees : 76
+- Videos avec rendu OK dans l'application : 76
+- Videos a corriger : 0
+
+Aucune video ne necessite de correction.
