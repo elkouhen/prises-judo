@@ -91,15 +91,21 @@ st.markdown(
         }
 
         .app-title {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin: 0 0 0.4rem;
+            gap: 0.75rem;
+            margin: 0 0 0.8rem;
             color: var(--ink);
             font-size: 1.65rem !important;
             font-weight: 850 !important;
-            line-height: 1.05 !important;
+            line-height: normal !important;
             letter-spacing: 0 !important;
+        }
+
+        .app-title-text {
+            display: inline-flex;
+            align-items: center;
+            transform: translateY(2px);
         }
 
         .app-title-mark {
@@ -726,7 +732,7 @@ st.markdown(
         <span class="app-title-mark" aria-hidden="true">
             {JUDO_MARK_SVG}
         </span>
-        <span>Gokyo - Judo</span>
+        <span class="app-title-text">Gokyo - Judo</span>
     </h1>
     """,
     unsafe_allow_html=True,
