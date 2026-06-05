@@ -175,7 +175,8 @@ st.markdown(
             margin-bottom: 0;
         }
 
-        .stButton {
+        .st-key-landscape_previous_button,
+        .st-key-landscape_next_button {
             display: none !important;
         }
 
@@ -230,7 +231,7 @@ st.markdown(
             .st-key-landscape_next_button {
                 display: block !important;
                 position: fixed;
-                right: 1.5rem;
+                right: calc(env(safe-area-inset-right, 0px) + 1rem);
                 z-index: 9999;
             }
 
@@ -244,7 +245,7 @@ st.markdown(
 
             .st-key-landscape_previous_button .stButton,
             .st-key-landscape_next_button .stButton {
-                display: block !important;
+                display: block;
             }
 
             .st-key-landscape_previous_button button,
@@ -327,7 +328,8 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
         """
         <script>
             function lockSelectInputs() {
-                const inputs = window.parent.document.querySelectorAll(
+                const doc = window.parent.document;
+                const inputs = doc.querySelectorAll(
                     '[data-baseweb="select"] input'
                 );
 
@@ -339,14 +341,18 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
             }
 
             lockSelectInputs();
-            window.parent.setTimeout(lockSelectInputs, 250);
-            window.parent.setTimeout(lockSelectInputs, 750);
 
-            const observer = new MutationObserver(lockSelectInputs);
-            observer.observe(window.parent.document.body, {
-                childList: true,
-                subtree: true
-            });
+            if (!window.parent.document._judoSelectInputLockBound) {
+                window.parent.document._judoSelectInputLockBound = true;
+                window.parent.setTimeout(lockSelectInputs, 250);
+                window.parent.setTimeout(lockSelectInputs, 750);
+
+                const observer = new MutationObserver(lockSelectInputs);
+                observer.observe(window.parent.document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            }
         </script>
         """
     )

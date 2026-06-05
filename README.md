@@ -1,6 +1,6 @@
 # prises-judo
 
-Application Streamlit qui liste des techniques de judo par catégorie. Lorsqu'une prise est sélectionnée, l'application affiche une description rapide et une vidéo YouTube.
+Application Streamlit mobile-first qui liste des techniques de judo par catégorie. Lorsqu'une prise est sélectionnée, l'application affiche une description rapide et une vidéo YouTube.
 
 ### Comment l'utiliser
 
@@ -16,6 +16,14 @@ Application Streamlit qui liste des techniques de judo par catégorie. Lorsqu'un
    streamlit run prises_judo.py
    ```
 
-3. Dans la barre latérale, choisissez une catégorie puis une prise.
+3. En haut de la page, choisissez une catégorie puis une prise.
 
 4. La page montre une description de la technique et intègre la vidéo YouTube.
+
+### Vérification mobile
+
+Lancez l'application, puis exécutez le contrôle Playwright :
+
+```bash
+python tests/mobile_layout_check.py
+```
