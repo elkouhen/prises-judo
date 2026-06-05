@@ -8,9 +8,13 @@ import streamlit.components.v1 as components
 
 from judo_utils import extract_youtube_id
 
+ASSETS_PATH = Path(__file__).with_name("assets")
+JUDO_MARK_ICON_PATH = ASSETS_PATH / "judo_mark.svg"
+JUDO_MARK_SVG = JUDO_MARK_ICON_PATH.read_text(encoding="utf-8")
+
 st.set_page_config(
     page_title="Prises de judo",
-    page_icon="🥋",
+    page_icon=JUDO_MARK_ICON_PATH,
     layout="wide",
 )
 
@@ -708,18 +712,10 @@ next_index = (current_index + 1) % len(technique_names)
 prevent_mobile_keyboard_on_selectboxes()
 
 st.markdown(
-    """
+    f"""
     <h1 class="app-title">
         <span class="app-title-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-                <polygon
-                    points="12,2.2 16.9,4.2 21.8,9.1 21.8,14.9 16.9,19.8 12,21.8 7.1,19.8 2.2,14.9 2.2,9.1 7.1,4.2"
-                    fill="#ffffff"
-                    stroke="currentColor"
-                    stroke-width="1.2"
-                />
-                <circle cx="12" cy="12" r="3.9" fill="#d01818" />
-            </svg>
+            {JUDO_MARK_SVG}
         </span>
         <span>Prises de Judo</span>
     </h1>
