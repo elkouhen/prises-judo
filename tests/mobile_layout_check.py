@@ -82,6 +82,54 @@ def assert_mobile_layout() -> None:
                         "element => element.getBoundingClientRect().width"
                     )
                     assert next_width < video_width * 0.3
+                    panel_box = page.locator(".tech-panel").evaluate(
+                        "element => element.getBoundingClientRect()"
+                    )
+                    nav_box = page.locator(".standard-navigation").first.evaluate(
+                        "element => element.getBoundingClientRect()"
+                    )
+                    nav_style = page.locator(".standard-navigation").first.evaluate(
+                        """element => ({
+                            background: getComputedStyle(element).backgroundColor,
+                            borderTopWidth: getComputedStyle(element).borderTopWidth,
+                            boxShadow: getComputedStyle(element).boxShadow,
+                        })"""
+                    )
+                    button_style = standard_next_button.evaluate(
+                        """element => ({
+                            background: getComputedStyle(element).backgroundColor,
+                            borderTopWidth: getComputedStyle(element).borderTopWidth,
+                            boxShadow: getComputedStyle(element).boxShadow,
+                        })"""
+                    )
+                    select_input_state = page.locator(
+                        '.stSelectbox [data-baseweb="select"] input'
+                    ).first.evaluate(
+                        """input => ({
+                            inputMode: input.getAttribute('inputmode'),
+                            pointerEvents: getComputedStyle(input).pointerEvents,
+                            readOnly: input.readOnly,
+                            tabIndex: input.tabIndex,
+                        })"""
+                    )
+                    assert nav_box["left"] >= panel_box["left"], (panel_box, nav_box)
+                    assert nav_box["right"] <= panel_box["right"], (panel_box, nav_box)
+                    assert nav_box["top"] >= panel_box["top"], (panel_box, nav_box)
+                    assert nav_box["top"] <= panel_box["top"] + 20, (panel_box, nav_box)
+                    assert panel_box["right"] - nav_box["right"] <= 20, (
+                        panel_box,
+                        nav_box,
+                    )
+                    assert nav_style["background"] == "rgba(0, 0, 0, 0)"
+                    assert nav_style["borderTopWidth"] == "0px"
+                    assert nav_style["boxShadow"] == "none"
+                    assert button_style["background"] == "rgba(0, 0, 0, 0)"
+                    assert button_style["borderTopWidth"] == "0px"
+                    assert button_style["boxShadow"] == "none"
+                    assert select_input_state["inputMode"] == "none"
+                    assert select_input_state["pointerEvents"] == "none"
+                    assert select_input_state["readOnly"] is True
+                    assert select_input_state["tabIndex"] == -1
                     expect(next_button).to_be_hidden()
                     expect(previous_button).to_be_hidden()
                     expect(page.locator(".landscape-nav-toggle")).to_be_hidden()

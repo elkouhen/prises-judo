@@ -4,6 +4,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 from judo_utils import extract_youtube_id
 
@@ -48,6 +49,7 @@ st.markdown(
         }
 
         .tech-panel {
+            position: relative;
             border: 1px solid var(--line);
             border-radius: 8px;
             background: var(--panel);
@@ -161,6 +163,7 @@ st.markdown(
 
         .stSelectbox input {
             caret-color: transparent;
+            pointer-events: none;
         }
 
         .stSelectbox {
@@ -246,6 +249,43 @@ st.markdown(
             background: var(--accent-soft);
             color: var(--accent) !important;
             box-shadow: 0 7px 16px rgba(42, 35, 24, 0.08);
+        }
+
+        @media (orientation: portrait) and (max-width: 950px) {
+            .tech-panel .standard-navigation {
+                position: absolute;
+                top: 0.55rem;
+                right: 0.55rem;
+                margin: 0;
+                gap: 0.34rem;
+                padding: 0.22rem;
+                border: 0;
+                background: transparent;
+                box-shadow: none;
+                z-index: 2;
+            }
+
+            .tech-panel .standard-nav-button {
+                width: 2.32rem;
+                height: 2.32rem;
+                border: 0;
+                background: transparent;
+                box-shadow: none;
+                font-size: 1.18rem;
+            }
+
+            .tech-panel .standard-nav-button:hover,
+            .tech-panel .standard-nav-button:focus,
+            .tech-panel .standard-nav-button:active {
+                border: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+
+            .tech-panel .technique-name {
+                min-height: 2.85rem;
+                padding-right: 6.2rem;
+            }
         }
 
         @media (orientation: landscape) and (max-width: 950px) and (max-height: 500px) and (pointer: coarse) {
@@ -596,7 +636,7 @@ def apply_query_param_selection() -> None:
 
 
 def prevent_mobile_keyboard_on_selectboxes() -> None:
-    st.html(
+    components.html(
         """
         <script>
             function lockSelectInputs() {
@@ -609,7 +649,20 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
                     input.setAttribute('readonly', 'readonly');
                     input.setAttribute('inputmode', 'none');
                     input.setAttribute('autocomplete', 'off');
+                    input.setAttribute('tabindex', '-1');
+                    input.style.pointerEvents = 'none';
                 });
+            }
+
+            function blurSelectInput(event) {
+                const input = event.target;
+                if (
+                    input instanceof HTMLInputElement
+                    && input.closest('[data-baseweb="select"]')
+                ) {
+                    lockSelectInputs();
+                    window.parent.requestAnimationFrame(() => input.blur());
+                }
             }
 
             lockSelectInputs();
@@ -618,6 +671,11 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
                 window.parent.document._judoSelectInputLockBound = true;
                 window.parent.setTimeout(lockSelectInputs, 250);
                 window.parent.setTimeout(lockSelectInputs, 750);
+                window.parent.document.addEventListener(
+                    'focusin',
+                    blurSelectInput,
+                    true
+                );
 
                 const observer = new MutationObserver(lockSelectInputs);
                 observer.observe(window.parent.document.body, {
@@ -626,7 +684,8 @@ def prevent_mobile_keyboard_on_selectboxes() -> None:
                 });
             }
         </script>
-        """
+        """,
+        height=0,
     )
 
 
@@ -704,6 +763,20 @@ st.markdown(
         <div class="video-wrapper">
             <iframe id="video-{escaped_video_id}" key="{escaped_video_id}" class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
+        <nav class="standard-navigation" aria-label="Navigation entre les prises">
+            <a
+                class="standard-nav-button standard-nav-previous"
+                href="{escape(get_selection_url(selected_category, technique_names[previous_index]))}"
+                target="_self"
+                aria-label="Prise précédente"
+            >←</a>
+            <a
+                class="standard-nav-button standard-nav-next"
+                href="{escape(get_selection_url(selected_category, technique_names[next_index]))}"
+                target="_self"
+                aria-label="Prochaine prise"
+            >→</a>
+        </nav>
     </div>
     """,
     unsafe_allow_html=True,
@@ -713,26 +786,6 @@ render_landscape_navigation_overlay(
     selected_category,
     selected_name,
     category_techniques,
-)
-
-st.markdown(
-    f"""
-    <nav class="standard-navigation" aria-label="Navigation entre les prises">
-        <a
-            class="standard-nav-button standard-nav-previous"
-            href="{escape(get_selection_url(selected_category, technique_names[previous_index]))}"
-            target="_self"
-            aria-label="Prise précédente"
-        >←</a>
-        <a
-            class="standard-nav-button standard-nav-next"
-            href="{escape(get_selection_url(selected_category, technique_names[next_index]))}"
-            target="_self"
-            aria-label="Prochaine prise"
-        >→</a>
-    </nav>
-    """,
-    unsafe_allow_html=True,
 )
 
 st.button(
