@@ -40,10 +40,13 @@ def assert_mobile_layout() -> None:
                 previous_button = page.locator(
                     ".st-key-landscape_previous_button button"
                 ).first
-
+                standard_next_button = page.locator(".standard-nav-next").first
+                standard_previous_button = page.locator(".standard-nav-previous").first
                 if is_landscape:
                     expect(next_button).to_be_visible()
                     expect(previous_button).to_be_visible()
+                    expect(standard_next_button).to_be_hidden()
+                    expect(standard_previous_button).to_be_hidden()
                     expect(page.locator(".landscape-nav-toggle")).to_be_visible()
                     expect(page.locator(".landscape-nav-panel")).to_be_hidden()
 
@@ -67,7 +70,18 @@ def assert_mobile_layout() -> None:
                     after_src = page.locator(".video-frame").get_attribute("src")
                     assert before_src != after_src
                 else:
+                    expect(page.locator(".field-label", has_text="Catégorie")).to_be_visible()
+                    expect(page.locator(".field-label", has_text="Prise")).to_be_visible()
                     expect(page.locator(".technique-name")).to_be_visible()
+                    expect(standard_next_button).to_be_visible()
+                    expect(standard_previous_button).to_be_visible()
+                    next_width = standard_next_button.evaluate(
+                        "element => element.getBoundingClientRect().width"
+                    )
+                    video_width = video.evaluate(
+                        "element => element.getBoundingClientRect().width"
+                    )
+                    assert next_width < video_width * 0.3
                     expect(next_button).to_be_hidden()
                     expect(previous_button).to_be_hidden()
                     expect(page.locator(".landscape-nav-toggle")).to_be_hidden()
@@ -84,6 +98,11 @@ def assert_mobile_layout() -> None:
 
             expect(desktop_page.locator(".video-wrapper")).to_be_visible()
             expect(desktop_page.locator(".app-title")).to_be_visible()
+            expect(desktop_page.locator(".field-label", has_text="Catégorie")).to_be_visible()
+            expect(desktop_page.locator(".field-label", has_text="Prise")).to_be_visible()
+            expect(desktop_page.locator(".technique-name")).to_be_visible()
+            expect(desktop_page.locator(".standard-nav-next").first).to_be_visible()
+            expect(desktop_page.locator(".standard-nav-previous").first).to_be_visible()
             expect(
                 desktop_page.locator(".st-key-landscape_next_button button").first
             ).to_be_hidden()
@@ -96,6 +115,23 @@ def assert_mobile_layout() -> None:
                 "element => getComputedStyle(element).position"
             )
             assert desktop_video_style != "fixed"
+            desktop_next_width = desktop_page.locator(
+                ".standard-nav-next"
+            ).first.evaluate("element => element.getBoundingClientRect().width")
+            desktop_video_width = desktop_page.locator(".video-wrapper").evaluate(
+                "element => element.getBoundingClientRect().width"
+            )
+            assert desktop_next_width < desktop_video_width * 0.3
+
+            desktop_before_src = desktop_page.locator(
+                ".video-frame"
+            ).get_attribute("src")
+            desktop_page.locator(".standard-nav-next").first.click()
+            desktop_page.wait_for_timeout(1_500)
+            desktop_after_src = desktop_page.locator(
+                ".video-frame"
+            ).get_attribute("src")
+            assert desktop_before_src != desktop_after_src
             desktop_page.close()
         finally:
             browser.close()

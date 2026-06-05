@@ -57,7 +57,7 @@ st.markdown(
         }
 
         .technique-name {
-            display: none;
+            display: block;
             margin: 0 0 0.25rem;
             color: var(--ink);
             font-size: 1.45rem !important;
@@ -116,18 +116,11 @@ st.markdown(
         }
 
         .tech-description {
-            display: none;
+            display: block;
             margin: 0 0 0.75rem;
             color: var(--muted);
             font-size: 0.95rem;
             line-height: 1.5;
-        }
-
-        @media (orientation: portrait) {
-            .technique-name,
-            .tech-description {
-                display: block;
-            }
         }
 
         .stSelectbox div[data-baseweb="select"] > div {
@@ -171,7 +164,16 @@ st.markdown(
         }
 
         .stSelectbox {
-            margin-bottom: 0;
+            margin-bottom: 0.65rem;
+        }
+
+        .field-label {
+            display: block;
+            margin: 0 0 0.32rem;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0;
         }
 
         .st-key-landscape_previous_button,
@@ -191,6 +193,61 @@ st.markdown(
             display: none;
         }
 
+        .standard-navigation-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.7rem;
+            min-width: 4.3rem;
+            color: var(--muted);
+            font-size: 0.82rem;
+            font-weight: 800;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .standard-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.48rem;
+            width: fit-content;
+            max-width: 100%;
+            margin: 0.85rem auto 0;
+            padding: 0.32rem;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 251, 0.82);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .standard-nav-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.7rem;
+            height: 2.7rem;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 251, 0.98);
+            color: var(--ink) !important;
+            box-shadow: 0 7px 16px rgba(42, 35, 24, 0.07);
+            font-size: 1.35rem;
+            font-weight: 750;
+            line-height: 1;
+            text-decoration: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .standard-nav-button:hover,
+        .standard-nav-button:focus,
+        .standard-nav-button:active {
+            border-color: rgba(185, 28, 28, 0.24);
+            background: var(--accent-soft);
+            color: var(--accent) !important;
+            box-shadow: 0 7px 16px rgba(42, 35, 24, 0.08);
+        }
+
         @media (orientation: landscape) and (max-width: 950px) and (max-height: 500px) and (pointer: coarse) {
             .block-container {
                 max-width: 100% !important;
@@ -198,7 +255,8 @@ st.markdown(
             }
 
             [data-testid="stElementContainer"]:has(.app-title),
-            [data-testid="stHorizontalBlock"]:has(.stSelectbox) {
+            [data-testid="stElementContainer"]:has(.field-label),
+            [data-testid="stElementContainer"]:has(.stSelectbox) {
                 display: none !important;
             }
 
@@ -237,6 +295,10 @@ st.markdown(
                 position: fixed;
                 right: calc(env(safe-area-inset-right, 0px) + 1rem);
                 z-index: 9999;
+            }
+
+            .standard-navigation {
+                display: none !important;
             }
 
             .st-key-landscape_previous_button {
@@ -608,29 +670,27 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-category_column, technique_column = st.columns([0.36, 0.64], gap="small")
-
-with category_column:
-    selected_category = st.selectbox(
-        "Catégorie",
-        categories,
-        label_visibility="collapsed",
-        key="selected_category",
-        on_change=reset_selected_name,
-    )
+st.markdown('<span class="field-label">Catégorie</span>', unsafe_allow_html=True)
+selected_category = st.selectbox(
+    "Catégorie",
+    categories,
+    label_visibility="collapsed",
+    key="selected_category",
+    on_change=reset_selected_name,
+)
 
 category_techniques = get_category_techniques(selected_category)
 technique_names = [technique["name"] for technique in category_techniques]
 
-with technique_column:
-    selected_name = st.selectbox(
-        "Prise",
-        technique_names,
-        format_func=format_technique_name,
-        label_visibility="collapsed",
-        key="selected_name",
-        on_change=sync_selected_name,
-    )
+st.markdown('<span class="field-label">Prise</span>', unsafe_allow_html=True)
+selected_name = st.selectbox(
+    "Prise",
+    technique_names,
+    format_func=format_technique_name,
+    label_visibility="collapsed",
+    key="selected_name",
+    on_change=sync_selected_name,
+)
 
 selected_technique = category_techniques[technique_names.index(selected_name)]
 
@@ -655,6 +715,27 @@ render_landscape_navigation_overlay(
     selected_category,
     selected_name,
     category_techniques,
+)
+
+st.markdown(
+    f"""
+    <nav class="standard-navigation" aria-label="Navigation entre les prises">
+        <a
+            class="standard-nav-button standard-nav-previous"
+            href="{escape(get_selection_url(selected_category, technique_names[previous_index]))}"
+            target="_self"
+            aria-label="Prise précédente"
+        >←</a>
+        <span class="standard-navigation-label">Prise</span>
+        <a
+            class="standard-nav-button standard-nav-next"
+            href="{escape(get_selection_url(selected_category, technique_names[next_index]))}"
+            target="_self"
+            aria-label="Prochaine prise"
+        >→</a>
+    </nav>
+    """,
+    unsafe_allow_html=True,
 )
 
 st.button(
