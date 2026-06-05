@@ -670,7 +670,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<span class="field-label">Catégorie</span>', unsafe_allow_html=True)
 selected_category = st.selectbox(
     "Catégorie",
     categories,
@@ -682,7 +681,6 @@ selected_category = st.selectbox(
 category_techniques = get_category_techniques(selected_category)
 technique_names = [technique["name"] for technique in category_techniques]
 
-st.markdown('<span class="field-label">Prise</span>', unsafe_allow_html=True)
 selected_name = st.selectbox(
     "Prise",
     technique_names,
@@ -726,7 +724,6 @@ st.markdown(
             target="_self"
             aria-label="Prise précédente"
         >←</a>
-        <span class="standard-navigation-label">Prise</span>
         <a
             class="standard-nav-button standard-nav-next"
             href="{escape(get_selection_url(selected_category, technique_names[next_index]))}"
