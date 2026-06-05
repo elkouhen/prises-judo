@@ -10,11 +10,11 @@ from judo_utils import extract_youtube_id
 
 ASSETS_PATH = Path(__file__).with_name("assets")
 JUDO_MARK_ICON_PATH = ASSETS_PATH / "judo_mark.svg"
-JUDO_MARK_SVG = JUDO_MARK_ICON_PATH.read_text(encoding="utf-8")
+JUDO_MARK_SVG = JUDO_MARK_ICON_PATH.read_text(encoding="utf-8").replace("\n", "").replace("\r", "")
 
 st.set_page_config(
     page_title="Prises de judo",
-    page_icon=JUDO_MARK_ICON_PATH,
+    page_icon=str(JUDO_MARK_ICON_PATH),
     layout="wide",
 )
 
@@ -119,6 +119,15 @@ st.markdown(
             width: 1.84rem;
             height: 1.84rem;
             display: block;
+        }
+
+        .app-title-mark svg polygon {
+            fill: #ffffff !important;
+            stroke: #171514 !important;
+        }
+
+        .app-title-mark svg circle {
+            fill: #d01818 !important;
         }
 
         .tech-description {
@@ -711,7 +720,7 @@ next_index = (current_index + 1) % len(technique_names)
 
 prevent_mobile_keyboard_on_selectboxes()
 
-st.markdown(
+st.html(
     f"""
     <h1 class="app-title">
         <span class="app-title-mark" aria-hidden="true">
@@ -719,8 +728,7 @@ st.markdown(
         </span>
         <span>Prises de Judo</span>
     </h1>
-    """,
-    unsafe_allow_html=True,
+    """
 )
 
 selected_category = st.selectbox(
