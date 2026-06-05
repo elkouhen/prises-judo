@@ -1,4 +1,4 @@
-# prises-judo
+# gokyo
 
 Application Streamlit mobile-first qui liste des techniques de judo par catégorie. Lorsqu'une prise est sélectionnée, l'application affiche une description rapide et une vidéo YouTube.
 

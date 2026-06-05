@@ -13,7 +13,7 @@ JUDO_MARK_ICON_PATH = ASSETS_PATH / "judo_mark.svg"
 JUDO_MARK_SVG = JUDO_MARK_ICON_PATH.read_text(encoding="utf-8").replace("\n", "").replace("\r", "")
 
 st.set_page_config(
-    page_title="Prises de judo",
+    page_title="Gokyo - nomenclature judo",
     page_icon="🥋",
     layout="wide",
 )
@@ -726,7 +726,7 @@ st.markdown(
         <span class="app-title-mark" aria-hidden="true">
             {JUDO_MARK_SVG}
         </span>
-        <span>Prises de Judo</span>
+        <span>Gokyo - Judo</span>
     </h1>
     """,
     unsafe_allow_html=True,
