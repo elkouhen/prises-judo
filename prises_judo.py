@@ -253,19 +253,35 @@ st.markdown(
                 height: 3.5rem;
                 min-width: 3.5rem;
                 padding: 0;
-                background: rgba(255, 255, 255, 0.85);
+                background: rgba(255, 255, 255, 0.94) !important;
                 backdrop-filter: blur(4px);
                 border: 0;
                 border-radius: 999px;
                 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
                 font-size: 1.6rem;
                 line-height: 1;
-                color: var(--ink);
+                color: var(--ink) !important;
+                opacity: 1 !important;
+                transform: none !important;
+                -webkit-tap-highlight-color: transparent;
             }
 
+            .st-key-landscape_previous_button button:hover,
+            .st-key-landscape_next_button button:hover,
+            .st-key-landscape_previous_button button:focus,
+            .st-key-landscape_next_button button:focus,
+            .st-key-landscape_previous_button button:focus-visible,
+            .st-key-landscape_next_button button:focus-visible,
             .st-key-landscape_previous_button button:active,
-            .st-key-landscape_next_button button:active {
-                background: rgba(255, 255, 255, 0.95);
+            .st-key-landscape_next_button button:active,
+            .st-key-landscape_previous_button button:disabled,
+            .st-key-landscape_next_button button:disabled {
+                background: rgba(255, 255, 255, 0.98) !important;
+                color: var(--ink) !important;
+                opacity: 1 !important;
+                border: 0 !important;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+                transform: none !important;
             }
         }
 
