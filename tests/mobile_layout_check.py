@@ -67,6 +67,7 @@ def assert_mobile_layout() -> None:
                     after_src = page.locator(".video-frame").get_attribute("src")
                     assert before_src != after_src
                 else:
+                    expect(page.locator(".technique-name")).to_be_visible()
                     expect(next_button).to_be_hidden()
                     expect(previous_button).to_be_hidden()
                     expect(page.locator(".landscape-nav-toggle")).to_be_hidden()

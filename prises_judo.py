@@ -20,19 +20,20 @@ st.markdown(
     """
     <style>
         :root {
-            --ink: #111827;
-            --muted: #4b5563;
-            --line: rgba(17, 24, 39, 0.12);
-            --panel: rgba(255, 255, 255, 0.92);
-            --surface: #f4f6f8;
-            --accent: #1f4b6e;
-            --accent-soft: rgba(31, 75, 110, 0.10);
+            --ink: #171514;
+            --muted: #615b53;
+            --line: rgba(23, 21, 20, 0.13);
+            --panel: rgba(255, 255, 251, 0.96);
+            --surface: #f7f6f0;
+            --accent: #b91c1c;
+            --accent-soft: rgba(185, 28, 28, 0.08);
+            --shadow-soft: 0 10px 28px rgba(42, 35, 24, 0.08);
         }
 
         .stApp {
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
-                linear-gradient(180deg, #f7f8fa 0%, #eef2f6 100%);
+                linear-gradient(180deg, rgba(255, 255, 251, 0.84), rgba(255, 255, 251, 0.72)),
+                linear-gradient(180deg, #fbfaf5 0%, var(--surface) 100%);
             color: var(--ink);
         }
 
@@ -50,9 +51,19 @@ st.markdown(
             border: 1px solid var(--line);
             border-radius: 8px;
             background: var(--panel);
-            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
-            margin-top: 0.75rem;
-            padding: 1rem;
+            box-shadow: var(--shadow-soft);
+            margin-top: 0.65rem;
+            padding: 0.9rem;
+        }
+
+        .technique-name {
+            display: none;
+            margin: 0 0 0.25rem;
+            color: var(--ink);
+            font-size: 1.45rem !important;
+            font-weight: 850 !important;
+            line-height: 1.12 !important;
+            letter-spacing: 0 !important;
         }
 
         .video-wrapper {
@@ -60,9 +71,9 @@ st.markdown(
             width: 100%;
             aspect-ratio: 16 / 9;
             overflow: hidden;
-            background: #0f172a;
+            background: #12100f;
             border-radius: 8px;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+            box-shadow: 0 12px 24px rgba(31, 26, 18, 0.16);
         }
 
         .video-frame {
@@ -79,10 +90,10 @@ st.markdown(
             gap: 0.5rem;
             margin: 0 0 0.4rem;
             color: var(--ink);
-            font-size: 1.4rem;
-            font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: 0;
+            font-size: 1.65rem !important;
+            font-weight: 850 !important;
+            line-height: 1.05 !important;
+            letter-spacing: 0 !important;
         }
 
         .app-title-mark {
@@ -94,7 +105,7 @@ st.markdown(
             border: 1px solid var(--line);
             border-radius: 999px;
             background: var(--panel);
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            box-shadow: 0 6px 14px rgba(42, 35, 24, 0.08);
             line-height: 1;
         }
 
@@ -109,10 +120,11 @@ st.markdown(
             margin: 0 0 0.75rem;
             color: var(--muted);
             font-size: 0.95rem;
-            line-height: 1.55;
+            line-height: 1.5;
         }
 
         @media (orientation: portrait) {
+            .technique-name,
             .tech-description {
                 display: block;
             }
@@ -121,9 +133,9 @@ st.markdown(
         .stSelectbox div[data-baseweb="select"] > div {
             min-height: 2.45rem;
             border-radius: 8px;
-            border-color: rgba(17, 24, 39, 0.14);
-            background: rgba(255, 255, 255, 0.96);
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+            border-color: var(--line);
+            background: rgba(255, 255, 251, 0.98);
+            box-shadow: 0 7px 16px rgba(42, 35, 24, 0.07);
         }
 
         .stSelectbox div[data-baseweb="select"] [role="combobox"],
@@ -142,7 +154,7 @@ st.markdown(
         }
 
         .stSelectbox div[data-baseweb="select"] input::placeholder {
-            color: rgba(17, 24, 39, 0.56) !important;
+            color: rgba(23, 21, 20, 0.56) !important;
         }
 
         .stSelectbox [data-baseweb="select"] [aria-selected="true"],
@@ -199,6 +211,7 @@ st.markdown(
                 box-shadow: none;
             }
 
+            .tech-panel .technique-name,
             .tech-panel .tech-description {
                 display: none;
             }
@@ -245,7 +258,7 @@ st.markdown(
                 height: 3.5rem;
                 min-width: 3.5rem;
                 padding: 0;
-                background: rgba(255, 255, 255, 0.94) !important;
+                background: rgba(255, 255, 251, 0.94) !important;
                 backdrop-filter: blur(4px);
                 border: 0;
                 border-radius: 999px;
@@ -268,7 +281,7 @@ st.markdown(
             .st-key-landscape_next_button button:active,
             .st-key-landscape_previous_button button:disabled,
             .st-key-landscape_next_button button:disabled {
-                background: rgba(255, 255, 255, 0.98) !important;
+                background: rgba(255, 255, 251, 0.98) !important;
                 color: var(--ink) !important;
                 opacity: 1 !important;
                 border: 0 !important;
@@ -295,9 +308,9 @@ st.markdown(
                 height: 2.75rem;
                 border: 0;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.94);
+                background: rgba(255, 255, 251, 0.94);
                 color: var(--ink);
-                box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16);
+                box-shadow: 0 8px 20px rgba(20, 16, 12, 0.18);
                 font-size: 1.08rem;
                 font-weight: 800;
                 line-height: 1;
@@ -328,9 +341,9 @@ st.markdown(
                 overflow: auto;
                 border: 1px solid var(--line);
                 border-radius: 8px;
-                background: rgba(255, 255, 255, 0.92);
+                background: rgba(255, 255, 251, 0.94);
                 backdrop-filter: blur(8px);
-                box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+                box-shadow: 0 12px 32px rgba(20, 16, 12, 0.18);
             }
 
             .landscape-nav-state:checked ~ .landscape-nav-toggle {
@@ -353,7 +366,7 @@ st.markdown(
             .landscape-nav-technique {
                 display: inline-flex;
                 align-items: center;
-                border: 1px solid rgba(17, 24, 39, 0.12);
+                border: 1px solid var(--line);
                 color: var(--ink) !important;
                 text-decoration: none !important;
                 -webkit-tap-highlight-color: transparent;
@@ -364,14 +377,14 @@ st.markdown(
                 min-height: 2rem;
                 padding: 0 0.7rem;
                 border-radius: 999px;
-                background: rgba(244, 246, 248, 0.88);
+                background: rgba(247, 246, 240, 0.9);
                 font-size: 0.82rem;
                 font-weight: 700;
                 white-space: nowrap;
             }
 
             .landscape-nav-category.is-active {
-                border-color: rgba(31, 75, 110, 0.22);
+                border-color: rgba(185, 28, 28, 0.24);
                 background: var(--accent-soft);
                 color: var(--accent) !important;
             }
@@ -385,13 +398,13 @@ st.markdown(
                 min-height: 2.25rem;
                 padding: 0.4rem 0.65rem;
                 border-radius: 8px;
-                background: rgba(244, 246, 248, 0.88);
+                background: rgba(247, 246, 240, 0.9);
                 font-size: 0.92rem;
                 font-weight: 650;
             }
 
             .landscape-nav-technique.is-active {
-                border-color: rgba(31, 75, 110, 0.22);
+                border-color: rgba(185, 28, 28, 0.24);
                 background: var(--accent-soft);
                 color: var(--accent) !important;
             }
@@ -628,6 +641,7 @@ escaped_video_id = escape(video_id)
 st.markdown(
     f"""
     <div class="tech-panel">
+        <h2 class="technique-name">{escape(format_technique_name(selected_technique["name"]))}</h2>
         <p class="tech-description">{escape(selected_technique["description"])}</p>
         <div class="video-wrapper">
             <iframe id="video-{escaped_video_id}" key="{escaped_video_id}" class="video-frame" src="{escape(embed_url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
